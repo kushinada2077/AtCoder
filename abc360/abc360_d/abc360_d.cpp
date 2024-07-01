@@ -3,23 +3,24 @@
 #include <vector>
 #define ll long long
 #define fastio cin.tie(0)->sync_with_stdio(0);
+#define for_in(i, x) for (int i = 0; i < x; ++i)
+#define si(x) int(x.size())
+#define all(x) (x).begin(), (x).end()
 using namespace std;
 
 int main() {
   fastio;
-  ll n, t, ans = 0;
+    int n, t, x;
+  ll ans = 0;
   string s;
   cin >> n >> t >> s;
-  vector<ll> coor(n), pos, neg;
-  for (int i = 0; i < n; ++i) {
-    cin >> coor[i];
-    if (s[i] == '0') neg.push_back(coor[i]);
-    else pos.push_back(coor[i]);
+  vector<int> a, b;
+  for_in(i, n) {
+    cin >> x;
+    if (s[i] == '0') b.push_back(x);
+    else a.push_back(x);
   }
-  sort(neg.begin(), neg.end());
-  for (auto v : pos) {
-    ll x = v + 2 * t;
-    ans += upper_bound(neg.begin(), neg.end(), x) - lower_bound(neg.begin(), neg.end(), v);
-  }
+  sort(all(b));
+  for (auto v : a) ans += upper_bound(all(b), (ll)v + 2 * t) - lower_bound(all(b), v);
   cout << ans;
 }
