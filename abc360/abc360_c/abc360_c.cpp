@@ -1,30 +1,25 @@
 #include <algorithm>
 #include <iostream>
-#include <queue>
 #include <vector>
 #define ll long long
 #define fastio cin.tie(0)->sync_with_stdio(0);
+#define for(i, x) for (int i = 0; i < x; ++i)
+#define si(x) int(x.size())
+#define all(x) (x).begin(), (x).end()
 using namespace std;
 
 int main() {
   fastio;
-  priority_queue<int, vector<int>, greater<int>> box[100005];
-  int n;
+    int n, a[100005], w[100005];
   ll ans = 0;
+  vector<int> x[100005];
   cin >> n;
-  int a[100005], w[100005];
-  for (int i = 0; i < n; ++i) cin >> a[i];
-  for (int i = 0; i < n; ++i) cin >> w[i];
-  for (int i = 0; i < n; ++i) {
-    int num = a[i] - 1;
-    box[num].push(w[i]);
-  }
-  for (int i = 0; i < n; ++i) {
-    auto pq = box[i];
-    while (pq.size() > 1) {
-      ans += pq.top();
-      pq.pop();
-    }
+  for (i, n) cin >> a[i];
+  for (i, n) cin >> w[i];
+  for (i, n) x[a[i] - 1].push_back(w[i]);
+  for (i, n) {
+    sort(all(x[i]));
+    for (j, si(x[i]) - 1) ans += x[i][j];
   }
   cout << ans;
 }
