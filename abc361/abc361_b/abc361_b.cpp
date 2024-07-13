@@ -1,39 +1,23 @@
 #include <algorithm>
 #include <iostream>
-#include <stack>
+#include <set>
 #include <vector>
 #define ll long long
 #define fastio cin.tie(0)->sync_with_stdio(0);
-#define FOR_IN_1(n) for (int i = 0; i < n; ++i)
-#define FOR_IN_2(i, n) for (int i = 0; i < n; ++i)
-#define FOR_IN_3(i, m, n) for (int i = m; i < n; ++i)
-#define GET_MACRO(_1, _2, _3, NAME, ...) NAME
-#define for_in(...) GET_MACRO(__VA_ARGS__, FOR_IN_3, FOR_IN_2, FOR_IN_1)(__VA_ARGS__)
+#define for_in(n) for (int i = 0; i < n; ++i)
 #define si(x) int(x.size())
 #define all(x) (x).begin(), (x).end()
-#define pb(x) push_back(x)
+#define pb(...) push_back(__VA_ARGS__)
+#define X first
+#define Y second
 using namespace std;
 
+bool f(int l1, int l2, int r1, int r2) { return !(r1 <= l2 || r2 <= l1); }
 int main() {
   fastio;
-    vector<vector<int>> a(2, vector<int>(6));
-  for_in(6) cin >> a[0][i];
-  for_in(6) cin >> a[1][i];
-  int cnt = 0;
-  for_in(2) {
-    for_in(j, 0, 3) if (a[i][j] <= a[!i][j] && a[!i][j] < a[i][j + 3]) cnt++;
-    if (cnt == 3) {
-      cout << "Yes";
-      return 0;
-    }
-  }
-  cnt = 0;
-  for_in(2) {
-    for_in(j, 0, 3) if (a[i][j] < a[!i][j + 3] && a[!i][j + 3] <= a[i][j + 3]) cnt++;
-    if (cnt == 3) {
-      cout << "Yes";
-      return 0;
-    }
-  }
-  cout << "No";
+  vector<int> a(6), b(6);
+  for (auto& i : a) cin >> i;
+  for (auto& i : b) cin >> i;
+  if (f(a[0], b[0], a[3], b[3]) && f(a[1], b[1], a[4], b[4]) && f(a[2], b[2], a[5], b[5])) cout << "Yes\n";
+  else cout << "No\n";
 }
