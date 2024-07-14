@@ -20,24 +20,23 @@ int main() {
   cin >> n;
   vector<int> a(n + 1);
   for (int i = 1; i <= n; ++i) cin >> a[i];
-  for (int i = n; i >= 0; --i) {
+  for (int i = 1; i <= n; ++i) {
+    for (int j = i + 1; j <= n; ++j) dp[i][j][2] += 1;
+  }
+  for (int i = n; i >= 1; --i) {
     for (int j = i + 1; j <= n; ++j) {
-      dp[i][j][2] += 1;
-      int d = a[j] - a[i];
-      for (int k = 2; k <= n - i; ++k) {
-        for (int l = j + 1; l <= n; ++l) {
-          if (a[l] - a[j] == d) dp[i][j][k + 1] = (dp[i][j][k + 1] + dp[j][l][k]) % mod;
+      for (int l = 3; l <= n - i + 1; ++l) {
+        for (int k = j + 1; k <= n; ++k) {
+          if (a[k] - a[j] == a[j] - a[i]) dp[i][j][l] = (dp[i][j][l] + dp[j][k][l - 1]) % mod;
         }
       }
     }
   }
   cout << n << " ";
-  for (int k = 2; k <= n; ++k) {
+  for (int l = 2; l <= n; ++l) {
     ll sum = 0;
     for (int i = 1; i <= n; ++i) {
-      for (int j = 1; j <= n; ++j) {
-        sum = (sum + dp[i][j][k]) % mod;
-      }
+      for (int j = i + 1; j <= n; ++j) sum = (sum + dp[i][j][l]) % mod;
     }
     cout << sum << " ";
   }
