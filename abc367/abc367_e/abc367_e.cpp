@@ -19,33 +19,27 @@
 using ll = long long;
 using namespace std;
 
-const int MX = 2e5 + 5;
 const int MX_D = 60;
-int nxt[MX][MX_D];
-
+int nxt[200005][MX_D];
 int main() {
   fastio;
     int n;
   ll k;
   cin >> n >> k;
-  vector<int> a(n + 1), x(n + 1);
   for (int i = 1; i <= n; ++i) cin >> nxt[i][0];
+  vector<int> a(n + 1);
   for (int i = 1; i <= n; ++i) cin >> a[i];
+
   for (int j = 1; j < MX_D; ++j) {
     for (int i = 1; i <= n; ++i) nxt[i][j] = nxt[nxt[i][j - 1]][j - 1];
   }
 
   vector<int> q(n + 1);
   for (int i = 1; i <= n; ++i) q[i] = i;
-
-  for (int lv = 0; lv < MX_D; ++lv) {
-    if (k % 2) {
-      for (int i = 1; i <= n; ++i) q[i] = nxt[q[i]][lv];
-    }
-    k >>= 1;
-  }
-
   for (int i = 1; i <= n; ++i) {
+    for (int j = 0; j < MX_D; ++j) {
+      if (k & (1ll << j)) q[i] = nxt[q[i]][j];
+    }
     cout << a[q[i]] << " ";
   }
 }
