@@ -5,10 +5,10 @@
 #include <map>
 #include <numeric>
 #include <queue>
+#include <set>
 #include <tuple>
 #include <vector>
 #define fastio cin.tie(0)->sync_with_stdio(0);
-#define for_in(n) for (int i = 0; i < n; ++i)
 #define si(x) int(x.size())
 #define all(x) (x).begin(), (x).end()
 #define pb(...) push_back(__VA_ARGS__)
@@ -19,14 +19,11 @@ using ll = long long;
 using namespace std;
 
 int main() {
-  fastio;
-    string s;
+  string s;
   cin >> s;
-  int idx = si(s) - 1;
-  while (s[idx] == '0') {
+  while (s.back() == '0')
     s.pop_back();
-    idx--;
-  }
-  if (s[idx] == '.') s.pop_back();
+  if (s.back() == '.')
+    s.pop_back();
   cout << s << "\n";
 }
