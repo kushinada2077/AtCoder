@@ -29,16 +29,16 @@ int main() {
     a.pb(a[i]);
   }
 
-  vector<int> r;
+  vector<int> r = {0};
   for (int i = 0; i < 2 * n; ++i) r.pb(((si(r) ? r.back() : 0) + a[i]) % m);
 
   vector<int> b(m, 0);
   ll ans = 0;
-  for (int i = 1; i < n; ++i) b[r[i]]++;
+  for (int i = 0; i < n; ++i) b[r[i]]++;
   for (int i = n; i < 2 * n; ++i) {
+    b[r[i - n]]--;
     ans += b[r[i]];
     b[r[i]]++;
-    b[r[i - n + 1]]--;
   }
   cout << ans << "\n";
 }
