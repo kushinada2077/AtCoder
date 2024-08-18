@@ -5,10 +5,10 @@
 #include <map>
 #include <numeric>
 #include <queue>
+#include <set>
 #include <tuple>
 #include <vector>
 #define fastio cin.tie(0)->sync_with_stdio(0);
-#define for_in(n) for (int i = 0; i < n; ++i)
 #define si(x) int(x.size())
 #define all(x) (x).begin(), (x).end()
 #define pb(...) push_back(__VA_ARGS__)
@@ -18,19 +18,22 @@
 using ll = long long;
 using namespace std;
 
-int n, k, x;
-vector<int> r, seq;
+int n, k;
+vector<int> a(8), seq;
 void f(int p) {
   if (p == n) {
-    int sum = 0;
-    for (auto& i : seq) sum += i;
-    if (sum % k) return;
-    for (auto& i : seq) cout << i << " ";
-    cout << "\n";
+    int tot = 0;
+    for (auto &i : seq)
+      tot += i;
+    if (tot % k == 0) {
+      for (auto &i : seq)
+        cout << i << " ";
+      cout << "\n";
+    }
     return;
   }
 
-  for (int i = 1; i <= r[p]; ++i) {
+  for (int i = 1; i <= a[p]; ++i) {
     seq.pb(i);
     f(p + 1);
     seq.pop_back();
@@ -38,8 +41,8 @@ void f(int p) {
 }
 int main() {
   fastio;
-    cin >> n >> k;
-  r = vector<int>(n);
-  for (auto& i : r) cin >> i;
+  cin >> n >> k;
+  for (int i = 0; i < n; ++i)
+    cin >> a[i];
   f(0);
 }
