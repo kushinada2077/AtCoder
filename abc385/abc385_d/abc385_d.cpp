@@ -41,7 +41,8 @@ int main() {
       while (it != yCoor[sx].end() && *it <= sy + c) {
         ans++;
         xCoor[*it].erase(sx);
-        it = yCoor[sx].erase(it);
+        yCoor[sx].erase(it);
+        it = yCoor[sx].lower_bound(sy);
       }
       sy += c;
     } else if (op == 'D') {
@@ -49,7 +50,8 @@ int main() {
       while (it != yCoor[sx].end() && *it <= sy) {
         ans++;
         xCoor[*it].erase(sx);
-        it = yCoor[sx].erase(it);
+        yCoor[sx].erase(it);
+        it = yCoor[sx].lower_bound(sy - c);
       }
       sy -= c;
     } else if (op == 'L') {
@@ -57,7 +59,8 @@ int main() {
       while (it != xCoor[sy].end() && *it <= sx) {
         ans++;
         yCoor[*it].erase(sy);
-        it = xCoor[sy].erase(it);
+        xCoor[sy].erase(it);
+        it = xCoor[sy].lower_bound(sx - c);
       }
       sx -= c;
     } else {
@@ -65,7 +68,8 @@ int main() {
       while (it != xCoor[sy].end() && *it <= sx + c) {
         ans++;
         yCoor[*it].erase(sy);
-        it = xCoor[sy].erase(it);
+        xCoor[sy].erase(it);
+        it = xCoor[sy].lower_bound(sx);
       }
       sx += c;
     }
