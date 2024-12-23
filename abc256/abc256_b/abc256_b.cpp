@@ -19,27 +19,29 @@
 using namespace std;
 using ll = long long;
 using TP = tuple<int, int, int>;
-// using P = pair<int, int>;
+using P = pair<int, int>;
 
-int n, A[105], P, pieces[4];
+int n, field[4], ans;
 int main() {
   fastio;
-  cin >> n;
+    cin >> n;
+  vector<int> A(n);
   for (int i = 0; i < n; ++i) cin >> A[i];
-  for (int j = 0; j < n; ++j) {
-    int i = A[j];
-    pieces[0]++;
-    for (int ii = 3; ii >= 0; --ii) {
-      if (pieces[ii] == 0) continue;
-      if (ii + i < 4) {
-        pieces[ii + i] += pieces[ii];
-        pieces[ii] = 0;
-      } else {
-        P += pieces[ii];
-        pieces[ii] = 0;
+  for (auto d : A) {
+    field[0] = 1;
+    for (int cur = 3; cur >= 0; --cur) {
+      int nxt = cur + d;
+      if (field[cur] == 1) {
+        if (nxt < 4) {
+          field[nxt] = 1;
+          field[cur] = 0;
+        } else {
+          ans++;
+          field[cur] = 0;
+        }
       }
     }
   }
 
-  cout << P << "\n";
+  cout << ans << "\n";
 }
