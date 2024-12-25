@@ -21,32 +21,26 @@ using ll = long long;
 using TP = tuple<int, int, int>;
 using P = pair<int, int>;
 
-int n, x, y;
-vector<P> coor, ans;
+int n;
+vector<P> query;
 int main() {
   fastio;
     cin >> n;
-  for (int i = 0; i < n; ++i) {
-    cin >> x >> y;
-    coor.pb(P(x, -y));
+  for (int l, r, i = 0; i < n; ++i) {
+    cin >> l >> r;
+    query.pb(P(l, 0));
+    query.pb(P(r, 1));
   }
 
-  sort(all(coor));
-
-  int curL = -1, curR = -1;
-
-  for (auto [l, r] : coor) {
-    r = -r;
-    if (curR < l) {
-      ans.pb(P(curL, curR));
-      curL = l;
-      curR = r;
-    } else if (r > curR) curR = r;
-  }
-
-  ans.pb(P(curL, curR));
-
-  for (int i = 1; i < si(ans); ++i) {
-    cout << ans[i].X << " " << ans[i].Y << "\n";
+  sort(all(query));
+  int cnt = 0;
+  for (auto [x, f] : query) {
+    if (f == 0) {
+      if (cnt == 0) cout << x << " ";
+      cnt++;
+    } else {
+      cnt--;
+      if (cnt == 0) cout << x << "\n";
+    }
   }
 }
