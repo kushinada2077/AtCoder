@@ -21,26 +21,20 @@ using ll = long long;
 using TP = tuple<int, int, int>;
 using P = pair<int, int>;
 
-int n;
-vector<P> query;
+const int MX = 2e5 + 5;
+int n, imos[MX];
 int main() {
   fastio;
     cin >> n;
   for (int l, r, i = 0; i < n; ++i) {
     cin >> l >> r;
-    query.pb(P(l, 0));
-    query.pb(P(r, 1));
+    imos[l]++;
+    imos[r]--;
   }
 
-  sort(all(query));
-  int cnt = 0;
-  for (auto [x, f] : query) {
-    if (f == 0) {
-      if (cnt == 0) cout << x << " ";
-      cnt++;
-    } else {
-      cnt--;
-      if (cnt == 0) cout << x << "\n";
-    }
+  for (int i = 1; i < MX; ++i) {
+    imos[i] = imos[i - 1] + imos[i];
+    if (imos[i - 1] == 0 && imos[i]) cout << i << " ";
+    else if (imos[i - 1] && imos[i] == 0) cout << i << "\n";
   }
 }
