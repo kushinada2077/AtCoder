@@ -8,25 +8,23 @@ using ll = long long;
 using TP = tuple<int, int, int>;
 using P = pair<int, int>;
 
-int n, m;
+int n, m, mny = INF;
 char c;
-set<int> bx;
 vector<tuple<int, int, int>> query;
 int main() {
   fastio;
   cin >> n >> m;
   for (int y, x, i = 0; i < m; ++i) {
     cin >> y >> x >> c;
-    query.push_back(tuple<int, int, int>(-y, -x, c));
+    query.push_back(tuple<int, int, int>(x, y, c));
   }
 
   sort(all(query));
-  for (auto [y, x, c] : query) {
-    y = -y, x = -x;
-    if (c == 'B') {
-      bx.insert(x);
+  for (auto [x, y, c] : query) {
+    if (c == 'W') {
+      mny = min(mny, y);
     } else {
-      if (bx.lower_bound(x) != bx.end()) {
+      if (mny <= y) {
         cout << "No\n";
         return 0;
       }
