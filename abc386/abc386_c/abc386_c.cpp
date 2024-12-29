@@ -8,64 +8,31 @@ using ll = long long;
 using TP = tuple<int, int, int>;
 using P = pair<int, int>;
 
-int k;
-string s, t;
+bool check(const string& s, const string& t) {
+  int j = 0;
+  for (int i = 0; i < si(s); ++i) {
+    if (j < si(t) && s[i] == t[j]) j++;
+  }
+
+  return j == si(t);
+}
 int main() {
   fastio;
+  int k;
+  string s, t;
   cin >> k >> s >> t;
-  if (abs(si(s) - si(t)) > 1) {
-    cout << "No\n";
-    return 0;
-  }
 
-  if (s == t) {
-    cout << "Yes\n";
-    return 0;
-  }
-
+  bool ok = false;
   if (si(s) == si(t)) {
     int cnt = 0;
     for (int i = 0; i < si(s); ++i) cnt += s[i] != t[i];
-    if (cnt == 1) {
-      cout << "Yes\n";
-      return 0;
-    }
+    ok = cnt < 2;
+  } else if (si(s) + 1 == si(t)) {
+    ok = check(t, s);
+  } else if (si(s) == si(t) + 1) {
+    ok = check(s, t);
   }
 
-  if (si(s) == si(t) + 1) {
-    int cnt = 0, sp = 0, tp = 0;
-    while (sp < si(s) && tp < si(t) && cnt <= 1) {
-      if (s[sp] != t[tp]) {
-        cnt++;
-        sp++;
-        continue;
-      }
-      sp++;
-      tp++;
-    }
-    if (cnt <= 1) {
-      cout << "Yes\n";
-      return 0;
-    }
-  }
-
-  if (si(s) + 1 == si(t)) {
-    int cnt = 0, sp = 0, tp = 0;
-    while (sp < si(s) && tp < si(t) && cnt <= 1) {
-      if (s[sp] != t[tp]) {
-        cnt++;
-        tp++;
-        continue;
-      }
-      sp++;
-      tp++;
-    }
-
-    if (cnt <= 1) {
-      cout << "Yes\n";
-      return 0;
-    }
-  }
-
-  cout << "No\n";
+  if (ok) cout << "Yes\n";
+  else cout << "No\n";
 }
