@@ -11,10 +11,10 @@ using P = pair<int, int>;
 int n, k;
 ll A[200005];
 ll solve(int idx, int cnt, ll sum) {
-  if (cnt == k) return sum;
+  if (cnt == 0) return sum;
   if (idx == n) return 0;
 
-  return max(solve(idx + 1, cnt + 1, sum ^ A[idx]), solve(idx + 1, cnt, sum));
+  return max(solve(idx + 1, cnt - 1, sum ^ A[idx]), solve(idx + 1, cnt, sum));
 }
 int main() {
   fastio;
@@ -26,9 +26,8 @@ int main() {
   }
 
   if (n - k < k) {
-    k = n - k;
-    cout << solve(0, 0, sum) << "\n";
+    cout << solve(0, n - k, sum) << "\n";
   } else {
-    cout << solve(0, 0, 0) << "\n";
+    cout << solve(0, k, 0) << "\n";
   }
 }
