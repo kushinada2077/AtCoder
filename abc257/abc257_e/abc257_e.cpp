@@ -15,10 +15,9 @@ int main() {
 
   for (int i = 0; i < length; ++i) {
     for (int j = 9; j >= 1; --j) {
-      if ((i64)mn * (length - i - 1) + C[j] <= n) {
-        ans.push_back((char)j + '0');
+      if (mn * (length - 1 - i) + C[j] <= n) {
+        ans.push_back(char('0' + j));
         n -= C[j];
-        break;
       }
     }
   }
