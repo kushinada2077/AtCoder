@@ -20,14 +20,12 @@ int main() {
     X %= pref[n];
   }
 
-  if (X != 0) {
-    for (int i = 0; i < n; ++i) {
-      int idx = lower_bound(pref + i + 1, pref + n + 1, X + pref[i]) - pref - 1;
-      if (idx == n) idx = lower_bound(pref, pref + i + 1, X - (pref[n] - pref[i])) - pref - 1;
-      int next_i = (idx + 1) % n;
-      nxt[i][0] = next_i;
-      cost[i] = i < next_i ? next_i - i : n - (i - next_i);
-    }
+  for (int i = 0; i < n; ++i) {
+    int idx = lower_bound(pref + i + 1, pref + n + 1, X + pref[i]) - pref - 1;
+    if (idx == n) idx = lower_bound(pref, pref + i + 1, X - (pref[n] - pref[i])) - pref - 1;
+    int next_i = (idx + 1) % n;
+    nxt[i][0] = next_i;
+    if (X != 0) cost[i] = i < next_i ? next_i - i : n - (i - next_i);
   }
 
   for (int k = 1; k < 50; ++k) {
