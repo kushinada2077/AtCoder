@@ -1,26 +1,22 @@
 #include <bits/stdc++.h>
 using namespace std;
 using i64 = long long;
-using TPi = tuple<int, int, int>;
-using Pi = pair<int, int>;
 
-int q, nxt[50][200005];
-i64 n, X, k, W[200005], pref[200005], cost[200005];
-
+int n, q, nxt[50][200005], num[200005];
+i64 x, k, W[200005], pref[200005];
 int main() {
   cin.tie(nullptr)->sync_with_stdio(false);
-  cin >> n >> q >> X;
+  cin >> n >> q >> x;
   for (int i = 0; i < n; ++i) {
     cin >> W[i];
     pref[i + 1] = pref[i] + W[i];
   }
 
-  i64 xm = X % pref[n];
-
+  i64 xm = x % pref[n];
   for (int i = 0, j = 0; i < n; ++i) {
-    while (pref[n] * (j / n) + pref[j % n] - pref[i] < xm) j++;
+    while (pref[j % n] + j / n * pref[n] - pref[i] < xm) j++;
     nxt[0][i] = j % n;
-    cost[i] = j - i + X / pref[n] * n;
+    num[i] = x / pref[n] * n + j - i;
   }
 
   for (int k = 1; k < 50; ++k) {
@@ -33,9 +29,10 @@ int main() {
     cin >> k;
     k--;
     int u = 0;
-    for (int i = 0; i < 50; ++i)
-      if (k & (1ll << i)) u = nxt[i][u];
+    for (int j = 0; j < 50; ++j) {
+      if (k & ((i64)1 << j)) u = nxt[j][u];
+    }
 
-    cout << cost[u] << "\n";
+    cout << num[u] << "\n";
   }
 }
