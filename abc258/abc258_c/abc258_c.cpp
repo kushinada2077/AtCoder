@@ -2,15 +2,17 @@
 using namespace std;
 using i64 = long long;
 
-int n, q;
+int n, q, f;
 string s;
+
 int main() {
   cin.tie(nullptr)->sync_with_stdio(false);
   cin >> n >> q >> s;
-  int prefix = 0;
-  for (int a, x, i = 0; i < q; ++i) {
-    cin >> a >> x;
-    if (a == 1) prefix = (prefix + n - x) % n;
-    if (a == 2) cout << s[(prefix + x - 1) % n] << "\n";
+  for (int t, x, i = 0; i < q; ++i) {
+    cin >> t >> x;
+    if (t == 1) f = (f + x) % n;
+    if (t == 2) {
+      cout << s[(x - 1 - f + n) % n] << "\n";
+    }
   }
 }
