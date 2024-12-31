@@ -3,13 +3,44 @@ using namespace std;
 using i64 = long long;
 using TPi = tuple<int, int, int>;
 using Pi = pair<int, int>;
-
-int n;
+int n, p[205];
 vector<tuple<i64, i64, i64>> coor;
-i64 cost[205][205], minPower[205][205];
+vector<pair<i64, i64>> adj[205];
+
+bool f(i64 s) {
+  for (int st = 1; st <= n; ++st) {
+    queue<int> q;
+    vector<bool> vis(n + 1, 0);
+    q.push(st);
+    vis[st] = true;
+
+    while (!q.empty()) {
+      int u = q.front();
+      q.pop();
+      for (auto [cost, v] : adj[u]) {
+        if (cost > s || vis[v]) continue;
+        q.push(v);
+        vis[v] = true;
+      }
+    }
+
+    bool f = true;
+    for (int i = 1; i <= n; ++i) {
+      if (!vis[i]) {
+        f = false;
+        break;
+      }
+    }
+
+    if (f) return true;
+  }
+
+  return false;
+}
 int main() {
   cin.tie(nullptr)->sync_with_stdio(false);
   cin >> n;
+  fill(p, p + n + 1, -1);
   for (int x, y, p, i = 0; i < n; ++i) {
     cin >> x >> y >> p;
     coor.push_back({x, y, p});
@@ -20,28 +51,16 @@ int main() {
     for (int v = 0; v < n; ++v) {
       if (u == v) continue;
       auto [nx, ny, _] = coor[v];
-      cost[u + 1][v + 1] = minPower[u + 1][v + 1] = (abs(nx - x) + abs(ny - y) + p - 1) / p;
+      adj[u + 1].push_back({(abs(x - nx) + abs(y - ny) + p - 1) / p, v + 1});
     }
   }
 
-  for (int k = 1; k <= n; ++k) {
-    for (int u = 1; u <= n; ++u) {
-      for (int v = 1; v <= n; ++v) {
-        minPower[u][v] = min(minPower[u][v], max(minPower[u][k], minPower[k][v]));
-      }
-    }
+  i64 lo = -1, hi = 4 * 10e9 + 5;
+  while (lo + 1 < hi) {
+    i64 mid = (lo + hi) / 2;
+    if (f(mid)) hi = mid;
+    else lo = mid;
   }
 
-  i64 ans = LLONG_MAX;
-  for (int u = 1; u <= n; ++u) {
-    i64 mx = 0;
-    for (int v = 1; v <= n; ++v) {
-      if (u == v) continue;
-      mx = max(mx, minPower[u][v]);
-    }
-
-    ans = min(ans, mx);
-  }
-
-  cout << ans << "\n";
+  cout << hi << "\n";
 }
