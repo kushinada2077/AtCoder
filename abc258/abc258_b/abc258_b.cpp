@@ -19,9 +19,9 @@ int main() {
         for (int dx = -1; dx <= 1; ++dx) {
           if (dy == 0 && dx == 0) continue;
           i64 val = 0;
-          for (int k = 0; k < n; ++k) {
-            int y = (i + k * dy + n) % n;
-            int x = (j + k * dx + n) % n;
+          for (int y = i, x = j, k = 0; k < n; ++k) {
+            y = (y + dy + n) % n;
+            x = (x + dx + n) % n;
             val = 10 * val + A[y][x];
           }
 
