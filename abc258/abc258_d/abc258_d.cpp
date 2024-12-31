@@ -9,11 +9,11 @@ int main() {
   cin.tie(nullptr)->sync_with_stdio(false);
   cin >> n >> x;
   for (int i = 0; i < n; ++i) cin >> A[i] >> B[i];
-  i64 ans = A[0] + B[0] + (x - 1) * B[0], sum = A[0] + B[0], min_cost = B[0];
+  i64 ans = LLONG_MAX, sum = 0, min_cost = LLONG_MAX;
 
-  for (int i = 1; i < n; ++i) {
-    min_cost = min(min_cost, B[i]);
+  for (int i = 0; i < n; ++i) {
     sum += A[i] + B[i];
+    min_cost = min(min_cost, B[i]);
     ans = min(ans, sum + (x - i - 1) * min_cost);
   }
 
