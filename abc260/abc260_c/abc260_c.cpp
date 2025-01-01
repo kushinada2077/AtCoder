@@ -8,11 +8,9 @@ int main() {
   cin >> n >> x >> y;
 
   for (int i = n; i > 1; --i) {
-    i64 na = a;
     b += x * a;
-    na += b;
+    a += b;
     b = y * b;
-    a = na;
   }
 
   cout << b << "\n";
