@@ -10,7 +10,5 @@ int main() {
   double r = hypot(a, b);
   theta += d * M_PI / 180;
   double x = cos(theta) * r, y = sin(theta) * r;
-  cout << fixed;
-  cout.precision(10);
-  cout << x << " " << y << "\n";
+  cout << fixed << setprecision(10) << x << " " << y << "\n";
 }
