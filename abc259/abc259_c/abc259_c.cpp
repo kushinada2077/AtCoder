@@ -2,32 +2,30 @@
 using namespace std;
 using i64 = long long;
 
+string s, t;
 bool compare(const string& s, const string& t) {
-  int si = 0, ti = 0, slen = s.size(), tlen = t.size();
-  if (slen > tlen) return false;
-  while (si < slen && ti < tlen) {
-    if (s[si] != t[ti]) return false;
-    if (0 < si && s[si - 1] == s[si]) {
-      while (si < slen && s[si] == s[si - 1] && s[si] == t[ti]) {
-        si++;
-        ti++;
+  int sl = s.size(), tl = t.size(), a, b;
+  a = b = 0;
+
+  while (a < sl && b < tl) {
+    if (s[a] != t[b]) return false;
+    if (0 < a && 0 < b && s[a - 1] == s[a]) {
+      while (a < sl && s[a - 1] == s[a] && s[a] == t[b]) {
+        a++;
+        b++;
       }
-      while (ti < tlen && t[ti] == t[ti - 1]) ti++;
+      while (b < tl && s[a - 1] == t[b]) b++;
     } else {
-      si++;
-      ti++;
+      a++;
+      b++;
     }
   }
 
-  return (si == slen && ti == tlen);
+  return a == sl && b == tl;
 }
-
 int main() {
   cin.tie(nullptr)->sync_with_stdio(false);
-  string s, t;
   cin >> s >> t;
-
   bool ans = compare(s, t);
-  if (ans) cout << "Yes\n";
-  else cout << "No\n";
+  cout << (ans ? "Yes" : "No") << "\n";
 }
