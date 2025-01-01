@@ -2,51 +2,46 @@
 using namespace std;
 using i64 = long long;
 
-int n, st, en;
-i64 sx, sy, tx, ty, x, y, r;
-vector<tuple<i64, i64, i64>> circle;
-vector<int> adj[3005];
+int n, sx, sy, tx, ty, x[3005], y[3005], r[3005];
+
+struct DSU {
+  vector<int> f, siz;
+  DSU(int n) : f(n), siz(n, 1) { iota(f.begin(), f.end(), 0); };
+  int leader(int x) {
+    while (x != f[x]) x = f[x] = f[f[x]];
+    return x;
+  }
+  bool same(int x, int y) { return leader(x) == leader(y); }
+  bool merge(int x, int y) {
+    x = leader(x), y = leader(y);
+    if (x == y) return false;
+    if (siz[x] < siz[y]) swap(x, y);
+    siz[x] += siz[y];
+    f[y] = x;
+    return true;
+  }
+  int size(int x) { return siz[leader(x)]; }
+};
+i64 dist(int x1, int y1, int x2, int y2) { return 1LL * (x1 - x2) * (x1 - x2) + 1LL * (y1 - y2) * (y1 - y2); }
 int main() {
   cin.tie(nullptr)->sync_with_stdio(false);
   cin >> n >> sx >> sy >> tx >> ty;
   for (int i = 0; i < n; ++i) {
-    cin >> x >> y >> r;
-    circle.push_back({x, y, r});
-    if (abs(x - sx) * abs(x - sx) + abs(y - sy) * abs(y - sy) == r * r) st = i + 1;
-    if (abs(x - tx) * abs(x - tx) + abs(y - ty) * abs(y - ty) == r * r) en = i + 1;
+    cin >> x[i] >> y[i] >> r[i];
   }
 
+  DSU dsu(n + 2);
   for (int i = 0; i < n; ++i) {
-    for (int j = 0; j < n; ++j) {
-      if (i == j) continue;
-      auto [x, y, r] = circle[i];
-      auto [nx, ny, nr] = circle[j];
-      i64 cDistP = abs(x - nx) * abs(x - nx) + abs(y - ny) * abs(y - ny);
-      i64 rSum = r + nr, rDiff = abs(r - nr);
-      if (rSum * rSum < cDistP) continue;
-      if (rDiff * rDiff > cDistP) continue;
-      adj[i + 1].push_back(j + 1);
-      adj[j + 1].push_back(i + 1);
+    if (dist(sx, sy, x[i], y[i]) == 1LL * r[i] * r[i]) dsu.merge(i, n);
+    if (dist(tx, ty, x[i], y[i]) == 1LL * r[i] * r[i]) dsu.merge(i, n + 1);
+    for (int j = i + 1; j < n; ++j) {
+      i64 d = dist(x[i], y[i], x[j], y[j]);
+      int sum = r[i] + r[j];
+      int diff = abs(r[i] - r[j]);
+      if (1LL * diff * diff <= d && d <= 1LL * sum * sum) dsu.merge(i, j);
     }
   }
 
-  queue<int> q;
-  q.push(st);
-  vector<bool> vis(3005);
-  vis[st] = true;
-  while (!q.empty()) {
-    int cur = q.front();
-    q.pop();
-    if (cur == en) {
-      cout << "Yes\n";
-      return 0;
-    }
-    for (auto nxt : adj[cur]) {
-      if (vis[nxt]) continue;
-      q.push(nxt);
-      vis[nxt] = true;
-    }
-  }
-
-  cout << "No\n";
+  if (dsu.same(n, n + 1)) cout << "Yes\n";
+  else cout << "No\n";
 }
