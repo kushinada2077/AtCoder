@@ -3,32 +3,30 @@ using namespace std;
 using i64 = long long;
 
 string s, t;
-vector<pair<char, int>> divide(const string& s) {
+vector<pair<char, int>> split(const string& s) {
+  int n = s.size();
   vector<pair<char, int>> ret;
-  int l = s.size(), i = 0;
-  while (i < l) {
-    int cnt = 1;
-    while (i < l - 1 && s[i] == s[i + 1]) {
-      i++;
-      cnt++;
-    }
-    ret.push_back({s[i], cnt});
-    i++;
+  for (int i = 0, j; i < n; i = j) {
+    for (j = i; j < n && s[i] == s[j]; ++j);
+    ret.emplace_back(s[i], j - i);
   }
-
   return ret;
 }
 int main() {
   cin.tie(nullptr)->sync_with_stdio(false);
   cin >> s >> t;
-  auto sseg = divide(s), tseg = divide(t);
+  auto a = split(s);
+  auto b = split(t);
+  if (a.size() != b.size()) {
+    cout << "No\n";
+    return 0;
+  }
+
+  int n = a.size();
   bool ok = true;
-  if (sseg.size() != tseg.size()) ok = false;
-  for (int i = 0; i < sseg.size(); ++i) {
-    auto [sc, sn] = sseg[i];
-    auto [tc, tn] = tseg[i];
-    if (sc != tc) ok = false;
-    else if (sn == 1 && tn > 1 || sn > tn) ok = false;
+  for (int i = 0; i < n; ++i) {
+    if (a[i].first != b[i].first) ok = false;
+    else if (a[i].second == 1 && a[i].second < b[i].second || a[i].second > 1 && a[i].second > b[i].second) ok = false;
     if (!ok) {
       cout << "No\n";
       return 0;
