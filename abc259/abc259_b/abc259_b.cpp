@@ -4,12 +4,13 @@ using i64 = long long;
 
 int main() {
   cin.tie(nullptr)->sync_with_stdio(false);
-  double x, y, d;
-  cin >> x >> y >> d;
-  double radian = d * M_PI / 180.0;
-  double xp = x * cos(radian) - y * sin(radian);
-  double yp = x * sin(radian) + y * cos(radian);
+  double a, b, d;
+  cin >> a >> b >> d;
+  double theta = atan2(b, a);
+  double r = hypot(a, b);
+  theta += d * M_PI / 180;
+  double x = cos(theta) * r, y = sin(theta) * r;
   cout << fixed;
   cout.precision(10);
-  cout << xp << " " << yp << "\n";
+  cout << x << " " << y << "\n";
 }
