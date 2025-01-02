@@ -2,47 +2,28 @@
 using namespace std;
 using i64 = long long;
 
-int n, k;
-// 맨 위 번호
-set<int> card;
-// (사이즈, 맨 위 번호)
-set<pair<int, int>> siz_list;
+map<int, vector<int>> table;
 int main() {
   cin.tie(nullptr)->sync_with_stdio(false);
+  int n, k;
   cin >> n >> k;
-  vector<int> P(n), ans(n, -1), nxt(n, -1), siz(n);
-  for (int i = 0; i < n; ++i) cin >> P[i];
+  vector<int> P(n), ans(n + 1, -1);
+  for (auto& i : P) cin >> i;
   for (int i = 0; i < n; ++i) {
-    int x = P[i] - 1;
-    auto it = card.lower_bound(x);
-    if (it != card.end()) {
-      int v = *it;
-      card.insert(x);
-      card.erase(v);
-      nxt[x] = v;
-      siz_list.erase({siz[v], v});
-      siz[x] = siz[v] + 1;
-      siz_list.insert({siz[x], x});
+    auto it = table.lower_bound(P[i]);
+    if (it == table.end()) {
+      table[P[i]].push_back(P[i]);
     } else {
-      card.insert(x);
-      siz_list.insert({1, x});
-      siz[x] = 1;
+      table[P[i]] = std::move(it->second);
+      table[P[i]].push_back(P[i]);
+      table.erase(it);
     }
 
-    auto itt = prev(siz_list.end());
-    while ((*itt).first >= k) {
-      auto [sz, st] = *itt;
-      int v = st;
-      while (v != -1) {
-        ans[v] = i + 1;
-        v = nxt[v];
-      }
-      card.erase(st);
-      itt = siz_list.erase(itt);
-      if (itt == siz_list.end()) break;
-      itt = prev(itt);
+    if (table[P[i]].size() == k) {
+      for (auto v : table[P[i]]) ans[v] = i + 1;
+      table.erase(P[i]);
     }
   }
 
-  for (int i = 0; i < n; ++i) cout << ans[i] << "\n";
+  for (int i = 1; i <= n; ++i) cout << ans[i] << "\n";
 }
