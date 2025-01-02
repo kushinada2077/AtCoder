@@ -19,16 +19,16 @@ int main() {
 
   std::vector<int> ans(m);
   for (int i = 0; i <= maxl; ++i) {
-    ans[minr - i]++;
-    ans[m - i]--;
+    ans[minr - i + 1]++;
+    ans[m - i + 1]--;
     minr = std::max(minr, f[i]);
   }
 
-  for (int i = 1; i < m; ++i) {
+  for (int i = 2; i <= m; ++i) {
     ans[i] += ans[i - 1];
   }
 
-  for (int i = 0; i < m; ++i) {
-    std::cout << ans[i] << " \n"[i == m - 1];
+  for (int i = 1; i <= m; ++i) {
+    std::cout << ans[i] << " \n"[i == m];
   }
 }
