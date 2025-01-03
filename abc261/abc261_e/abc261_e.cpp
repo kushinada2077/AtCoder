@@ -10,19 +10,13 @@ int main() {
   std::cin.tie(nullptr)->sync_with_stdio(false);
   int n, c;
   std::cin >> n >> c;
-  std::vector<int> t(n), a(n), ans(n);
-  std::vector<std::vector<std::array<int, 2>>> f(30, std::vector<std::array<int, 2>>(n));
-  for (int i = 0; i < n; ++i) std::cin >> t[i] >> a[i];
-  for (int k = 0; k < 30; ++k) {
-    int bit = (c >> k) & 1;
-    int arr[2] = {0, 1};
-    for (int i = 0; i < n; ++i) {
-      arr[0] = operate(arr[0], (a[i] >> k) & 1, t[i]);
-      arr[1] = operate(arr[1], (a[i] >> k) & 1, t[i]);
-      bit = arr[bit];
-      ans[i] |= (bit << k);
-    }
+  int s0 = 0, s1 = (1 << 30) - 1, m = (1 << 30) - 1;
+  for (int i = 0; i < n; ++i) {
+    int t, a;
+    std::cin >> t >> a;
+    s0 = operate(s0, a, t);
+    s1 = operate(s1, a, t);
+    c = ((c & s1) | (~c & s0));
+    std::cout << c << "\n";
   }
-
-  for (int i = 0; i < n; ++i) std::cout << ans[i] << "\n";
 }
