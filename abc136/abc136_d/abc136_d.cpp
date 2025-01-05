@@ -1,32 +1,26 @@
 #include <bits/stdc++.h>
 using i64 = long long;
 
+std::vector<int> split(std::string& s) {
+  int n = s.size(), j = 0;
+  std::vector<int> ret(n);
+  for (int i = 1; i < n; ++i) {
+    if (s[i] == 'L' && s[i - 1] == 'R') {
+      int l = i, r = i - 1;
+      while (i < n && s[i] == 'L') i++;
+      for (int k = j; k < i; ++k) {
+        ret[std::array{l, r}[abs(l - k) % 2]]++;
+      }
+      j = i;
+    }
+  }
+
+  return ret;
+}
 int main() {
   std::cin.tie(nullptr)->sync_with_stdio(false);
   std::string s;
   std::cin >> s;
-  int n = s.size();
-  std::vector f(333, std::vector<int>(n));
-  for (int i = 0; i < n; ++i) {
-    if (s[i] == 'R') f[0][i] = i + 1;
-    else f[0][i] = i - 1;
-  }
-
-  for (int k = 1; k < 333; ++k) {
-    for (int i = 0; i < n; ++i) {
-      f[k][i] = f[k - 1][f[k - 1][i]];
-    }
-  }
-
-  std::vector<int> ans(n, 0);
-  for (int i = 0; i < n; ++i) {
-    int c = i;
-    for (int k = 100; k < 333; ++k) {
-      c = f[k][c];
-    }
-
-    ans[c]++;
-  }
-
+  std::vector<int> ans = split(s);
   for (auto i : ans) std::cout << i << " ";
 }
