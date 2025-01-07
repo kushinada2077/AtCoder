@@ -5,10 +5,8 @@ int main() {
   std::cin.tie(nullptr)->sync_with_stdio(false);
   i64 a, b, x, ans = 0;
   std::cin >> a >> b >> x;
-  i64 st = a + (a % x ? (x - a % x) : 0);
-  if (st <= b) {
-    ans += 1 + (b - st) / x;
-  }
-
+  if (a % x == 0) ans++;
+  a -= (a % x);
+  ans += (b - a) / x;
   std::cout << ans << "\n";
 }
