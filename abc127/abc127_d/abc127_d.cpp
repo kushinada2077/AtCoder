@@ -5,30 +5,27 @@ int main() {
   std::cin.tie(nullptr)->sync_with_stdio(false);
   int n, m;
   std::cin >> n >> m;
-  std::map<int, int> a;
+  i64 ans = 0;
+  std::priority_queue<int, std::vector<int>, std::greater<int>> pq;
   for (int i = 0; i < n; ++i) {
     int x;
     std::cin >> x;
-    a[x]++;
+    pq.push(x);
+    ans += 1LL * x;
   }
 
+  std::vector<std::pair<int, int>> query(m);
   for (int i = 0; i < m; ++i) {
-    int b, c;
-    std::cin >> b >> c;
-
-    while (b) {
-      auto [v, cnt] = *a.begin();
-      if (v > c) break;
-      a[v] = std::max(0, cnt - b);
-      a[c] += cnt - a[v];
-      b = std::max(0, b - cnt);
-      if (cnt == 0) a.erase(v);
-    }
+    std::cin >> query[i].second >> query[i].first;
   }
 
-  i64 ans = 0;
-  for (auto [v, cnt] : a) {
-    ans += 1LL * v * cnt;
+  sort(query.begin(), query.end(), std::greater<std::pair<int, int>>());
+  for (int i = 0; i < m; ++i) {
+    auto [c, b] = query[i];
+    while (!pq.empty() && b-- && pq.top() < c) {
+      ans += c - pq.top();
+      pq.pop();
+    }
   }
 
   std::cout << ans << "\n";
