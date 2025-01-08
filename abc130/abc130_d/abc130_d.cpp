@@ -13,11 +13,11 @@ int main() {
   }
 
   i64 ans = 0;
-  for (int i = 1; i <= n; ++i) {
-    if (pref[i] < k) continue;
-    int j = std::upper_bound(pref.begin(), pref.end(), pref[i] - k) - pref.begin();
-    if (j == n + 1) continue;
-    ans += j;
+  for (int i = 0, j = 0; i <= n;) {
+    for (; j <= n && pref[j] - pref[i] < k; ++j);
+    if (pref[j] - pref[i] < k) break;
+    ans += n - j + 1;
+    i++;
   }
 
   std::cout << ans << "\n";
