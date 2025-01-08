@@ -1,37 +1,46 @@
 #include <bits/stdc++.h>
-using namespace std;
 using i64 = long long;
 
-string s, t;
-vector<pair<char, int>> split(const string& s) {
+std::vector<std::string> split(const std::string& s) {
   int n = s.size();
-  vector<pair<char, int>> ret;
-  for (int i = 0, j; i < n; i = j) {
-    for (j = i; j < n && s[i] == s[j]; ++j);
-    ret.emplace_back(s[i], j - i);
+  std::vector<std::string> ret;
+  for (int i = 0, j = 0; i < n; i = j) {
+    std::string t = "";
+    for (; j < n && s[i] == s[j]; ++j) {
+      t += s[j];
+    }
+    ret.push_back(t);
   }
+
   return ret;
 }
+
 int main() {
-  cin.tie(nullptr)->sync_with_stdio(false);
-  cin >> s >> t;
-  auto a = split(s);
-  auto b = split(t);
-  if (a.size() != b.size()) {
-    cout << "No\n";
+  std::cin.tie(nullptr)->sync_with_stdio(false);
+  std::string s, t;
+  std::cin >> s >> t;
+  std::vector<std::string> sb = split(s), tb = split(t);
+
+  if (sb.size() != tb.size()) {
+    std::cout << "No\n";
     return 0;
   }
 
-  int n = a.size();
-  bool ok = true;
+  int n = sb.size();
+
   for (int i = 0; i < n; ++i) {
-    if (a[i].first != b[i].first) ok = false;
-    else if (a[i].second == 1 && a[i].second < b[i].second || a[i].second > 1 && a[i].second > b[i].second) ok = false;
+    bool ok = true;
+    if (sb[i][0] != tb[i][0]) {
+      ok = false;
+    } else if (sb[i].size() == 1 && tb[i].size() > 1 || sb[i].size() > 1 && tb[i].size() < sb[i].size()) {
+      ok = false;
+    }
+
     if (!ok) {
-      cout << "No\n";
+      std::cout << "No\n";
       return 0;
     }
   }
 
-  cout << "Yes\n";
+  std::cout << "Yes\n";
 }
