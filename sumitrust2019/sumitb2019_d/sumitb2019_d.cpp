@@ -4,11 +4,9 @@ using i64 = long long;
 bool ok(const std::string& s, const std::string& t) {
   int n = s.size(), m = t.size();
   for (int i = 0, j = 0; i < n; ++i) {
-    while (j < m && s[i] != t[j]) {
-      j++;
-    }
+    for (; j < m && s[i] != t[j]; ++j);
     if (j == m) return false;
-    j++;
+    ++j;
   }
 
   return true;
@@ -20,10 +18,10 @@ int main() {
   std::string s;
   std::cin >> n >> s;
   for (int i = 0; i < 1000; ++i) {
-    std::string a = "";
-    a += i / 100 + '0';
-    a += i / 10 % 10 + '0';
-    a += i % 10 + '0';
+    std::string a(3, ' ');
+    a[0] = i / 100 + '0';
+    a[1] = i / 10 % 10 + '0';
+    a[2] = i % 10 + '0';
     ans += ok(a, s);
   }
 
