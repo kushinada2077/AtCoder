@@ -5,29 +5,12 @@ int main() {
   std::cin.tie(nullptr)->sync_with_stdio(false);
   int n, x, y;
   std::cin >> n >> x >> y;
-  std::vector adj(n + 1, std::vector<int>());
-  for (int i = 1; i < n; ++i) {
-    adj[i].push_back(i + 1);
-    adj[i + 1].push_back(i);
-  }
-  adj[x].push_back(y);
-  adj[y].push_back(x);
-  std::vector<int> ans(n + 1);
+  std::vector<int> ans(n);
 
-  for (int st = 1; st <= n; ++st) {
-    std::queue<int> q;
-    std::vector<int> dist(n + 1, -1);
-    q.push(st);
-    dist[st] = 0;
-    while (!q.empty()) {
-      int u = q.front();
-      q.pop();
-      for (auto v : adj[u]) {
-        if (dist[v] != -1) continue;
-        q.push(v);
-        dist[v] = dist[u] + 1;
-        if (st < v) ans[dist[v]]++;
-      }
+  for (int i = 1; i <= n; ++i) {
+    for (int j = i + 1; j <= n; ++j) {
+      int d = std::min({abs(i - j), abs(i - x) + abs(j - y) + 1, abs(j - x) + abs(i - y) + 1});
+      ans[d]++;
     }
   }
 
