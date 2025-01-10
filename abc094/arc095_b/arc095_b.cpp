@@ -10,10 +10,12 @@ int main() {
     std::cin >> a[i];
   }
   std::sort(a.begin(), a.end());
-  int i = std::lower_bound(a.begin(), a.end(), a.back() / 2) - a.begin();
-  if (i == n - 1 || i - 1 >= 0 && std::abs(a[i - 1] - a.back() / 2) < std::abs(a[i] - a.back() / 2)) {
-    i = i - 1;
+  int x = a.back(), j = -1;
+  for (int i = 0; i < n - 1; ++i) {
+    if (j == -1 || std::abs(x - 2 * a[i]) < std::abs(x - 2 * a[j])) {
+      j = i;
+    }
   }
 
-  std::cout << a.back() << " " << a[i] << "\n";
+  std::cout << x << " " << a[j] << "\n";
 }
