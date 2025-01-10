@@ -10,19 +10,14 @@ int main() {
     std::cin >> c[i] >> s[i] >> f[i];
   }
 
-  for (int st = 0; st < n - 1; ++st) {
-    int u = st, time = 0;
-    while (u != n - 1) {
-      if (time <= s[u]) {
-        time += s[u] - time + c[u];
-      } else {
-        if (time % f[u]) time += f[u] - (time % f[u]);
-        time += c[u];
-      }
-      u++;
+  for (int i = 0; i < n - 1; ++i) {
+    int t = s[i] + c[i];
+    for (int j = i + 1; j < n - 1; ++j) {
+      if (t < s[j]) t = s[j];
+      else if (t % f[j]) t += f[j] - t % f[j];
+      t += c[j];
     }
-
-    std::cout << time << "\n";
+    std::cout << t << "\n";
   }
 
   std::cout << 0 << "\n";
