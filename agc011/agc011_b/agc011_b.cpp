@@ -1,17 +1,6 @@
 #include <bits/stdc++.h>
 using i64 = long long;
 
-bool ok(int idx, std::vector<i64>& a) {
-  int n = a.size();
-  i64 siz = a[idx];
-  for (int i = 0; i < n; ++i) {
-    if (i == idx) continue;
-    if (2 * siz < a[i]) return false;
-    siz += a[i];
-  }
-
-  return true;
-}
 int main() {
   std::cin.tie(nullptr)->sync_with_stdio(false);
   int n;
@@ -21,14 +10,14 @@ int main() {
     std::cin >> a[i];
   }
   sort(a.begin(), a.end());
-  int lo = 0, hi = a.back();
-  while (lo + 1 < hi) {
-    int mid = (lo + hi) / 2;
-    int idx = lower_bound(a.begin(), a.end(), mid) - a.begin();
-    if (ok(idx, a)) hi = mid;
-    else lo = mid;
+  i64 sum = 0;
+  int k = 0;
+  for (int i = 0; i < n - 1; ++i) {
+    sum += a[i];
+    if (2 * sum < a[i + 1]) {
+      k = i + 1;
+    }
   }
 
-  int ans = a.end() - lower_bound(a.begin(), a.end(), hi);
-  std::cout << ans << "\n";
+  std::cout << n - k << "\n";
 }
