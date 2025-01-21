@@ -5,21 +5,15 @@ int main() {
   std::cin.tie(nullptr)->sync_with_stdio(false);
   std::string x;
   std::cin >> x;
-  int n = x.size();
-  std::list<char> l(x.begin(), x.end());
-  auto it = l.begin();
-  while (next(it) != l.end()) {
-    std::string s(1, *it);
-    s += *next(it);
-    if (s == "ST") {
-      it = l.erase(it);
-      it = l.erase(it);
-      if (it != l.begin()) {
-        it = prev(it);
-      }
+  int n = x.size(), ans = n;
+  std::stack<char> s;
+  for (int i = 0; i < n; ++i) {
+    if (!s.empty() && s.top() == 'S' && x[i] == 'T') {
+      ans -= 2;
+      s.pop();
     } else {
-      it = next(it);
+      s.push(x[i]);
     }
   }
-  std::cout << l.size() << "\n";
+  std::cout << ans << "\n";
 }
