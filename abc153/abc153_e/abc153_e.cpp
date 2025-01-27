@@ -5,24 +5,15 @@ int main() {
   std::cin.tie(nullptr)->sync_with_stdio(false);
   int h, n;
   std::cin >> h >> n;
-  std::vector<int> a(n), b(n);
+  std::vector<int> dp(20001, 0x3f3f3f3f);
+  dp[0] = 0;
   for (int i = 0; i < n; ++i) {
-    std::cin >> a[i] >> b[i];
-  }
-  int ans = 0x3f3f3f3f;
-  std::vector dp(n + 1, std::vector<int>(20001, 0x3f3f3f3f));
-  for (int i = n - 1; i >= 0; --i) {
-    dp[i][0] = 0;
-    for (int j = 1; j <= 20000; ++j) {
-      dp[i][j] = dp[i + 1][j];
-      if (j - a[i] <= 20000 && j - a[i] >= 0) {
-        dp[i][j] = std::min(dp[i][j], dp[i][j - a[i]] + b[i]);
-      }
-      if (j >= h) {
-        ans = std::min(ans, dp[i][j]);
-      }
+    int a, b;
+    std::cin >> a >> b;
+    for (int j = 1; j <= 20001; ++j) {
+      if (j - a >= 0) dp[j] = std::min(dp[j], dp[j - a] + b);
     }
   }
 
-  std::cout << ans << "\n";
+  std::cout << *min_element(dp.begin() + h, dp.end()) << "\n";
 }
