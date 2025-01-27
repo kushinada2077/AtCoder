@@ -18,5 +18,5 @@ int main() {
     }
   }
 
-  std::cout << *min_element(dp.begin() + h, dp.end()) << "\n";
+  std::cout << dp[h] << "\n";
 }
