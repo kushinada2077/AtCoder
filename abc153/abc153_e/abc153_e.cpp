@@ -10,8 +10,11 @@ int main() {
   for (int i = 0; i < n; ++i) {
     int a, b;
     std::cin >> a >> b;
-    for (int j = 1; j <= 20001; ++j) {
+    for (int j = 1; j <= 20000; ++j) {
       if (j - a >= 0) dp[j] = std::min(dp[j], dp[j - a] + b);
+    }
+    for (int j = 19999; j >= 0; --j) {
+      dp[j] = std::min(dp[j], dp[j + 1]);
     }
   }
 
