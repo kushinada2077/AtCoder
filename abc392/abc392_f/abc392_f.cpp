@@ -45,7 +45,6 @@ struct Fenwick {
     return x;
   }
 };
-
 int main() {
   std::cin.tie(nullptr)->sync_with_stdio(false);
   int n;
@@ -56,21 +55,19 @@ int main() {
     P[i]--;
   }
 
-  Fenwick<int> fen(n);
+  std::vector<int> ans(n);
+  Fenwick<int> fw(n);
   for (int i = 0; i < n; ++i) {
-    fen.add(i, 1);
+    fw.add(i, 1);
   }
 
-  std::vector<int> A(n);
   for (int i = n - 1; i >= 0; --i) {
-    int x = fen.select(P[i]);
-    A[x] = i;
-    fen.add(x, -1);
+    int x = fw.select(P[i]);
+    ans[x] = i;
+    fw.add(x, -1);
   }
 
   for (int i = 0; i < n; ++i) {
-    std::cout << A[i] + 1 << " \n"[i == n - 1];
+    std::cout << ans[i] + 1 << " \n"[i == n - 1];
   }
-
-  return 0;
 }
