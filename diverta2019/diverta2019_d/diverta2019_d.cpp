@@ -7,11 +7,7 @@ int main() {
   std::cin >> N;
   for (i64 p = 1; p * p < N; ++p) {
     if (N % p == 0) {
-      i64 m = p - 1;
-      if (m > 0 && N / m == N % m) {
-        ans += m;
-      }
-      m = N / p - 1;
+      i64 m = N / p - 1;
       if (m > 0 && N / m == N % m) {
         ans += m;
       }
