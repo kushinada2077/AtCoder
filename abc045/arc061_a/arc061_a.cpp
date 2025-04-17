@@ -1,20 +1,33 @@
 #include <bits/stdc++.h>
 using i64 = long long;
 
-void solve(std::string& S, int k, i64 tot, i64 cur, i64& ans) {
-  if (k == S.size()) {
-    ans += tot + cur;
+void solve(std::string& S, std::vector<bool>& c, int k, i64& ans) {
+  if (k + 1 == S.size()) {
+    i64 tot = 0, cur = 0;
+    for (int i = 0; i < S.size(); ++i) {
+      cur *= 10;
+      cur += S[i] - '0';
+      if (i + 1 != S.size() && c[i] == true) {
+        tot += cur;
+        cur = 0;
+      }
+    }
+    tot += cur;
+    ans += tot;
     return;
   }
 
-  solve(S, k + 1, tot + cur, 0, ans);
-  solve(S, k + 1, tot, 10 * cur + (S[k] - '0'), ans);
+  solve(S, c, k + 1, ans);
+  c[k] = true;
+  solve(S, c, k + 1, ans);
+  c[k] = false;
 }
 int main() {
   std::cin.tie(nullptr)->sync_with_stdio(false);
   std::string S;
   std::cin >> S;
   i64 ans = 0;
-  solve(S, 0, 0, 0, ans);
+  std::vector<bool> c(S.size());
+  solve(S, c, 0, ans);
   std::cout << ans << "\n";
 }
