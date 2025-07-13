@@ -1,81 +1,69 @@
 #include <bits/stdc++.h>
 using i64 = long long;
 
-bool isPal(std::vector<int>& a, int l, int r) {
-  if (l >= r) {
-    return true;
+bool isPal(i64 n, i64 a) {
+  std::vector<i64> digit;
+  while (n > 0) {
+    digit.push_back(n % a);
+    n /= a;
   }
-  if (a[l] == a[r - 1]) {
-    return isPal(a, l + 1, r - 1);
+
+  int len = digit.size();
+  for (int i = 0; i < len / 2; ++i) {
+    if (digit[i] != digit[len - 1 - i]) {
+      return false;
+    }
   }
-  return false;
+
+  return true;
 }
 int main() {
   std::cin.tie(nullptr)->sync_with_stdio(false);
   int A;
   i64 N;
   std::cin >> A >> N;
-  std::vector<i64> pal;
-  for (i64 i = 1; i < 10; ++i) {
-    pal.push_back(i);
-  }
-  for (int i = 1; i <= 6; ++i) {
-    int max = 1;
-    for (int j = 0; j < i; ++j) {
-      max *= 10;
-    }
+  std::vector<i64> pal(9);
+  std::iota(pal.begin(), pal.end(), 1);
+  for (int len = 2; len <= 12; ++len) {
     int min = 1;
-    for (int j = 0; j < i - 1; ++j) {
+    for (int i = 0; i < len / 2 - 1; ++i) {
       min *= 10;
     }
-    for (int j = min; j <= max; ++j) {
-      std::vector<int> tmp;
-      int copy = j;
-      while (copy > 0) {
-        tmp.push_back(copy % 10);
-        copy /= 10;
-      }
-      int sz = tmp.size();
-      i64 item = 0;
-      for (int k = sz - 1; k >= 0; --k) {
-        item *= 10;
-        item += tmp[k];
-      }
-      i64 middle = item;
-      for (int k = 0; k < sz; ++k) {
-        item *= 10;
-        item += tmp[k];
-      }
-      pal.push_back(item);
-      for (int p = 0; p < 10; ++p) {
-        i64 item_n = middle;
-        item_n *= 10;
-        item_n += p;
-        for (int q = 0; q < sz; ++q) {
-          item_n *= 10;
-          item_n += tmp[q];
+    int max = min * 10;
+    for (int i = min; i < max; ++i) {
+      if (len % 2 == 1) {
+        for (int j = 0; j < 10; ++j) {
+          i64 res = i * 10;
+          res += j;
+          int k = i;
+          while (k > 0) {
+            res *= 10;
+            res += k % 10;
+            k /= 10;
+          }
+          pal.push_back(res);
         }
-        pal.push_back(item_n);
+      } else {
+        i64 res = i;
+        int j = i;
+        while (j > 0) {
+          res *= 10;
+          res += j % 10;
+          j /= 10;
+        }
+        pal.push_back(res);
       }
     }
   }
 
-  sort(pal.begin(), pal.end());
-
   i64 ans = 0;
-  for (auto p : pal) {
-    if (p > N) {
+  for (int i = 0; i < pal.size(); ++i) {
+    if (pal[i] > N) {
       break;
     }
-    i64 copy = p;
-    std::vector<int> trans;
-    while (copy > 0) {
-      trans.push_back(copy % A);
-      copy /= A;
-    }
-    std::reverse(trans.begin(), trans.end());
-    if (isPal(trans, 0, trans.size()) == true) {
-      ans += p;
+
+    if (isPal(pal[i], A)) {
+      ans += pal[i];
     }
   }
 
