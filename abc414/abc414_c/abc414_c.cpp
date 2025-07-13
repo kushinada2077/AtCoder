@@ -17,6 +17,16 @@ bool isPal(i64 n, i64 a) {
 
   return true;
 }
+i64 rev_attach(i64 n, i64 x) {
+  i64 ret = n;
+  while (x > 0) {
+    ret *= 10;
+    ret += x % 10;
+    x /= 10;
+  }
+  return ret;
+}
+
 int main() {
   std::cin.tie(nullptr)->sync_with_stdio(false);
   int A;
@@ -32,26 +42,12 @@ int main() {
     int max = min * 10;
     for (int i = min; i < max; ++i) {
       if (len % 2 == 1) {
-        for (int j = 0; j < 10; ++j) {
-          i64 res = i * 10;
-          res += j;
-          int k = i;
-          while (k > 0) {
-            res *= 10;
-            res += k % 10;
-            k /= 10;
-          }
-          pal.push_back(res);
+        for (int mid = 0; mid < 10; ++mid) {
+          i64 res = i * 10 + mid;
+          pal.push_back(rev_attach(res, i));
         }
       } else {
-        i64 res = i;
-        int j = i;
-        while (j > 0) {
-          res *= 10;
-          res += j % 10;
-          j /= 10;
-        }
-        pal.push_back(res);
+        pal.push_back(rev_attach(i, i));
       }
     }
   }
