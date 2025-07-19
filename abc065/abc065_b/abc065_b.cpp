@@ -10,20 +10,17 @@ int main() {
     std::cin >> next[i];
     next[i]--;
   }
-  std::queue<int> q;
-  std::vector<int> dist(N, -1);
-  q.push(0);
-  dist[0] = 0;
-  while (!q.empty()) {
-    int u = q.front();
-    q.pop();
-    int v = next[u];
-    if (dist[v] != -1) {
-      continue;
+  int c = 0, u = 0;
+  while (true) {
+    if (c >= N) {
+      c = -1;
+      break;
     }
-    q.push(v);
-    dist[v] = dist[u] + 1;
+    if (u == 1) {
+      break;
+    }
+    c++;
+    u = next[u];
   }
-
-  std::cout << dist[1] << "\n";
+  std::cout << c << "\n";
 }
