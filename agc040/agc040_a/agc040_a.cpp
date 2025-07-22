@@ -5,37 +5,27 @@ int main() {
   std::cin.tie(nullptr)->sync_with_stdio(false);
   std::string S;
   std::cin >> S;
-  int N = S.size() + 1;
-  std::vector adj(N, std::vector<int>());
-  std::vector<int> indg(N, 0);
-  for (int i = 0; i < N - 1; ++i) {
-    if (S[i] == '<') {
-      adj[i].push_back(i + 1);
-      indg[i + 1]++;
+  int N = S.size();
+  std::vector<int> A(N + 1, 0);
+  int c = 0;
+  for (int i = 1; i < N + 1; ++i) {
+    if (S[i - 1] == '<') {
+      c++;
     } else {
-      adj[i + 1].push_back(i);
-      indg[i]++;
+      c = 0;
     }
+    A[i] = std::max(A[i], c);
   }
 
-  std::queue<std::pair<int, int>> q;
-  for (int i = 0; i < N; ++i) {
-    if (indg[i] == 0) {
-      q.push({i, 0});
+  c = 0;
+  for (int i = N - 1; i >= 0; --i) {
+    if (S[i] == '>') {
+      c++;
+    } else {
+      c = 0;
     }
+    A[i] = std::max(A[i], c);
   }
 
-  i64 ans = 0;
-  while (!q.empty()) {
-    auto [u, val] = q.front();
-    q.pop();
-    ans += val;
-    for (auto v : adj[u]) {
-      if (--indg[v] == 0) {
-        q.push({v, val + 1});
-      }
-    }
-  }
-
-  std::cout << ans << "\n";
+  std::cout << std::accumulate(A.begin(), A.end(), 0LL) << "\n";
 }
