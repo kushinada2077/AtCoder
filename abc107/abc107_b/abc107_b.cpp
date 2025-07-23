@@ -11,29 +11,18 @@ int main() {
   }
   std::vector<bool> row(H), col(W);
   for (int i = 0; i < H; ++i) {
-    bool ok = true;
     for (int j = 0; j < W; ++j) {
-      ok &= a[i][j] == '.';
-    }
-    if (ok) {
-      row[i] = true;
-    }
-  }
-
-  for (int j = 0; j < W; ++j) {
-    bool ok = true;
-    for (int i = 0; i < H; ++i) {
-      ok &= a[i][j] == '.';
-    }
-    if (ok) {
-      col[j] = true;
+      if (a[i][j] == '#') {
+        row[i] = true;
+        col[j] = true;
+      }
     }
   }
 
   for (int i = 0; i < H; ++i) {
-    if (row[i]) continue;
+    if (!row[i]) continue;
     for (int j = 0; j < W; ++j) {
-      if (col[j]) continue;
+      if (!col[j]) continue;
       std::cout << a[i][j];
     }
     std::cout << "\n";
