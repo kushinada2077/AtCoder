@@ -10,20 +10,15 @@ int main() {
     }
   }
 
+  std::vector<int> a(3), b(3);
+  a[1] = c[1][0] - c[0][0] + a[0];
+  a[2] = c[2][0] - c[1][0] + a[1];
+  b[0] = c[0][0] - a[0];
+  b[1] = c[0][1] - c[0][0] + b[0];
+  b[2] = c[0][2] - c[0][1] + b[1];
   for (int i = 0; i < 3; ++i) {
-    int a = c[(i + 1) % 3][0] - c[i][0];
-    for (int j = 1; j < 3; ++j) {
-      if (a != c[(i + 1) % 3][j] - c[i][j]) {
-        std::cout << "No\n";
-        return 0;
-      }
-    }
-  }
-
-  for (int j = 0; j < 3; ++j) {
-    int a = c[0][(j + 1) % 3] - c[0][j];
-    for (int i = 1; i < 3; ++i) {
-      if (a != c[i][(j + 1) % 3] - c[i][j]) {
+    for (int j = 0; j < 3; ++j) {
+      if (a[i] + b[j] != c[i][j]) {
         std::cout << "No\n";
         return 0;
       }
