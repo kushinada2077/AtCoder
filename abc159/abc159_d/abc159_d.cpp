@@ -19,7 +19,7 @@ int main() {
   }
 
   for (int i = 0; i < N; ++i) {
-    i64 res = tot - cal(cnt[A[i]]) + cal(cnt[A[i]] - 1);
+    i64 res = tot - cnt[A[i]] + 1;
     std::cout << res << "\n";
   }
 }
