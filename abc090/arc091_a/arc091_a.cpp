@@ -11,7 +11,7 @@ int main() {
   } else if (N == 1 || M == 1) {
     ans -= 2;
   } else {
-    ans -= 4 + 2 * (N - 2) + 2 * (M - 2);
+    ans -= 2 * (N + M) - 4;
   }
   std::cout << ans << "\n";
 }
