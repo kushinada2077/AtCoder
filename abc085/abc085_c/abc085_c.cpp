@@ -3,18 +3,51 @@ using i64 = long long;
 
 int main() {
   std::cin.tie(nullptr)->sync_with_stdio(false);
-  int N, Y;
+  int N, Y, tot = 0;
   std::cin >> N >> Y;
-  for (int i = 0; i <= N; ++i) {
-    for (int j = 0; j <= N - i; ++j) {
-      int k = N - i - j;
-      if (k < 0) continue;
-      if (10000 * i + 5000 * j + 1000 * k == Y) {
-        std::cout << i << " " << j << " " << k << "\n";
-        return 0;
+  std::vector<int> M = {10000, 5000, 1000}, ans(3, 0);
+  for (int i = 0; i < 3; ++i) {
+    ans[2 - i] += Y / M[i];
+    Y %= M[i];
+    tot += ans[2 - i];
+  }
+
+  if (tot > N) {
+    for (int i = 0; i < 3; ++i) {
+      ans[i] = -1;
+    }
+  } else if (tot < N) {
+    int D = N - tot;
+    if (ans[2] > 0 && D >= 9) {
+      int x = std::min(ans[2], D / 9);
+      ans[2] -= x;
+      ans[0] += 10 * x;
+      tot += 9 * x;
+      D -= 9 * x;
+    }
+    if (ans[1] > 0 && D >= 4) {
+      int x = std::min(ans[1], D / 4);
+      ans[1] -= x;
+      ans[0] += 5 * x;
+      tot += 4 * x;
+      D -= 4 * x;
+    }
+    if (ans[2] > 0 && D >= 1) {
+      int x = std::min(ans[2], D / 1);
+      ans[2] -= x;
+      ans[1] += 2 * x;
+      tot += x;
+      D -= x;
+    }
+
+    if (D > 0) {
+      for (int i = 0; i < 3; ++i) {
+        ans[i] = -1;
       }
     }
   }
 
-  std::cout << "-1 -1 -1\n";
+  for (int i = 0; i < 3; ++i) {
+    std::cout << ans[2 - i] << " \n"[i == 2];
+  }
 }
