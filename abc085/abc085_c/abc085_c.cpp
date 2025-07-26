@@ -18,27 +18,23 @@ int main() {
     }
   } else if (tot < N) {
     int D = N - tot;
-    if (ans[2] > 0 && D >= 9) {
-      int x = std::min(ans[2], D / 9);
-      ans[2] -= x;
-      ans[0] += 10 * x;
-      tot += 9 * x;
-      D -= 9 * x;
-    }
-    if (ans[1] > 0 && D >= 4) {
-      int x = std::min(ans[1], D / 4);
-      ans[1] -= x;
-      ans[0] += 5 * x;
-      tot += 4 * x;
-      D -= 4 * x;
-    }
-    if (ans[2] > 0 && D >= 1) {
-      int x = std::min(ans[2], D / 1);
-      ans[2] -= x;
-      ans[1] += 2 * x;
-      tot += x;
-      D -= x;
-    }
+    int x = std::min(ans[2], D / 9);
+    ans[2] -= x;
+    ans[0] += 10 * x;
+    tot += 9 * x;
+    D -= 9 * x;
+
+    x = std::min(ans[1], D / 4);
+    ans[1] -= x;
+    ans[0] += 5 * x;
+    tot += 4 * x;
+    D -= 4 * x;
+
+    x = std::min(ans[2], D / 1);
+    ans[2] -= x;
+    ans[1] += 2 * x;
+    tot += x;
+    D -= x;
 
     if (D > 0) {
       for (int i = 0; i < 3; ++i) {
