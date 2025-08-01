@@ -11,19 +11,18 @@ int main() {
     dist[i][i] = 0;
   }
   for (int i = 0; i < M; ++i) {
-    int a, b;
-    i64 c;
+    int a, b, c;
     std::cin >> a >> b >> c;
-    dist[a][b] = std::min(dist[a][b], c);
-    dist[b][a] = std::min(dist[b][a], c);
+    dist[a][b] = std::min(dist[a][b], (i64)c);
+    dist[b][a] = std::min(dist[b][a], (i64)c);
   }
   int K, T;
   std::cin >> K >> T;
   for (int i = 0; i < K; ++i) {
     int D;
     std::cin >> D;
-    dist[0][D] = 0;
     dist[D][0] = T;
+    dist[0][D] = 0;
   }
 
   for (int k = 0; k <= N; ++k) {
@@ -37,35 +36,37 @@ int main() {
   int Q;
   std::cin >> Q;
   for (int i = 0; i < Q; ++i) {
-    int op;
-    std::cin >> op;
-    if (op == 1) {
+    int type;
+    std::cin >> type;
+    if (type == 1) {
       int x, y, t;
       std::cin >> x >> y >> t;
-
-      for (int i = 0; i <= N; ++i) {
-        for (int j = 0; j <= N; ++j) {
-          dist[i][j] = std::min(dist[i][j], dist[i][y] + t + dist[x][j]);
-          dist[i][j] = std::min(dist[i][j], dist[i][x] + t + dist[y][j]);
+      dist[x][y] = std::min(dist[x][y], (i64)t);
+      dist[y][x] = std::min(dist[y][x], (i64)t);
+      for (auto k : {x, y}) {
+        for (int i = 0; i <= N; ++i) {
+          for (int j = 0; j <= N; ++j) {
+            dist[i][j] = std::min(dist[i][j], dist[i][k] + dist[k][j]);
+          }
         }
       }
-    } else if (op == 2) {
+    } else if (type == 2) {
       int x;
       std::cin >> x;
-      for (int i = 0; i <= N; ++i) {
-        for (int j = 0; j <= N; ++j) {
-          dist[i][j] = std::min(dist[i][j], dist[i][x] + T + dist[0][j]);
-          dist[i][j] = std::min(dist[i][j], dist[i][0] + dist[x][j]);
+      dist[x][0] = T;
+      dist[0][x] = 0;
+      for (auto k : {0, x}) {
+        for (int i = 0; i <= N; ++i) {
+          for (int j = 0; j <= N; ++j) {
+            dist[i][j] = std::min(dist[i][j], dist[i][k] + dist[k][j]);
+          }
         }
       }
-
-    } else if (op == 3) {
+    } else if (type == 3) {
       i64 tot = 0;
       for (int i = 1; i <= N; ++i) {
         for (int j = 1; j <= N; ++j) {
-          if (dist[i][j] != INF) {
-            tot += dist[i][j];
-          }
+          tot += dist[i][j] % INF;
         }
       }
       std::cout << tot << "\n";
