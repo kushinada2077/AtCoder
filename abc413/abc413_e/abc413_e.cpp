@@ -4,26 +4,28 @@ using i64 = long long;
 void solve() {
   int N;
   std::cin >> N;
-  int L = (1 << N);
-  std::vector<int> P(L);
-  for (int i = 0; i < L; ++i) {
+  int M = (1 << N);
+  std::vector<int> P(M);
+  for (int i = 0; i < M; ++i) {
     std::cin >> P[i];
   }
 
-  auto solve = [&](auto&& solve, int l, int r) -> std::vector<int> {
-    if (r - l == 1) return {P[l]};
+  auto f = [&](auto&& f, int l, int r) -> std::vector<int> {
+    if (l + 1 == r) {
+      return {P[l]};
+    }
+
     int mid = (l + r) / 2;
-    auto a = solve(solve, l, mid);
-    auto b = solve(solve, mid, r);
-    if (a[0] > b[0]) swap(a, b);
-    a.insert(a.end(), b.begin(), b.end());
-    return a;
+    auto A = f(f, l, mid);
+    auto B = f(f, mid, r);
+    if (A[0] > B[0]) std::swap(A, B);
+    A.insert(A.end(), B.begin(), B.end());
+    return A;
   };
 
-  P = solve(solve, 0, L);
-
-  for (int i = 0; i < L; ++i) {
-    std::cout << P[i] << " \n"[i == L - 1];
+  auto ans = f(f, 0, M);
+  for (int i = 0; i < M; ++i) {
+    std::cout << ans[i] << " \n"[i == M - 1];
   }
 }
 int main() {
