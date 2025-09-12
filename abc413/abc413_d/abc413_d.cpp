@@ -1,46 +1,34 @@
 #include <bits/stdc++.h>
 using i64 = long long;
 
-void solve() {
+bool solve() {
   int N;
   std::cin >> N;
-  std::vector<int> A(N);
+  std::vector<i64> A(N);
   for (int i = 0; i < N; ++i) {
     std::cin >> A[i];
   }
 
-  if (std::all_of(A.begin(), A.end(), [&](int x) { return std::abs(x) == std::abs(A[0]); })) {
-    int p = 0;
-    for (int i = 0; i < N; ++i) {
-      p += A[i] > 0;
-    }
-    int m = N - p;
-    if (p == 0 || p == N || std::abs(p - m) <= 1) {
-      std::cout << "Yes\n";
-    } else {
-      std::cout << "No\n";
-    }
-    return;
+  if (std::ranges::count(A, A[0]) == N) return true;
+
+  if (const auto p_cnt{std::ranges::count(A, A[0])}, m_cnt{std::ranges::count(A, -A[0])}; p_cnt + m_cnt == N && std::min(p_cnt, m_cnt) == N / 2) return true;
+
+  std::sort(A.begin(), A.end(), [&](i64 a, i64 b) { return std::abs(a) < std::abs(b); });
+  for (int i = 1; i < N; i++) {
+    if (i + 1 < N && A[i - 1] * A[i + 1] != A[i] * A[i]) return false;
   }
 
-  std::sort(A.begin(), A.end(), [&](int a, int b) { return std::abs(a) < std::abs(b); });
-  int lo = A[0], hi = A[1], gcd = std::gcd(lo, hi);
-  lo = lo / gcd, hi = hi / gcd;
-  for (int i = 1; i < N - 1; ++i) {
-    gcd = std::gcd(A[i], A[i + 1]);
-    if ((lo != A[i] / gcd || hi != A[i + 1] / gcd) && (lo != -A[i] / gcd || hi != -A[i + 1] / gcd)) {
-      std::cout << "No\n";
-      return;
-    }
-  }
-  std::cout << "Yes\n";
+  return true;
 }
-
 int main() {
   std::cin.tie(nullptr)->sync_with_stdio(false);
   int T;
   std::cin >> T;
   while (T--) {
-    solve();
+    if (solve() == true) {
+      std::cout << "Yes\n";
+    } else {
+      std::cout << "No\n";
+    }
   }
 }
