@@ -1,0 +1,40 @@
+#include <bits/stdc++.h>
+#include <atcoder/modint>
+using i64 = long long;
+using P = std::pair<int, int>;
+
+int main() {
+  std::cin.tie(nullptr)->sync_with_stdio(false);
+  int n;
+  std::string s;
+  std::cin >> n >> s;
+
+  std::vector<int> child, adult, w(n);
+  for (int i = 0; i < n; ++i) {
+    std::cin >> w[i];
+    if (s[i] == '0') {
+      child.push_back(w[i]);
+    } else {
+      adult.push_back(w[i]);
+    }
+  }
+
+  std::ranges::sort(child);
+  std::ranges::sort(adult);
+  int k = (int)child.size();
+  int m = (int)adult.size();
+
+  int ans = 0;
+  if (k == 0) ans = std::max(ans, m);
+  else if (m == 0) ans = std::max(ans, k);
+  else {
+    ans = std::max(ans, k + (int)(m - (std::lower_bound(adult.begin(), adult.end(), child.back() + 1) - adult.begin())));
+    for (int i = 0; i < n; ++i) {
+      int p = m - (std::lower_bound(adult.begin(), adult.end(), w[i]) - adult.begin());
+      int q = std::lower_bound(child.begin(), child.end(), w[i]) - child.begin();
+      if (q == k) q = 0;
+      ans = std::max(ans, p + q);
+    }
+  }
+  std::cout << ans << "\n";
+}
