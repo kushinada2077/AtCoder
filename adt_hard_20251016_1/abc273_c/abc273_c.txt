@@ -1,0 +1,22 @@
+#include <bits/stdc++.h>
+#include <atcoder/modint>
+using i64 = long long;
+using P = std::pair<int, int>;
+
+int main() {
+  std::cin.tie(nullptr)->sync_with_stdio(false);
+  int n;
+  std::cin >> n;
+  std::vector<int> a(n);
+  for (int i = 0; i < n; ++i) std::cin >> a[i];
+
+  std::vector<int> b = a, ans(n, 0);
+  std::ranges::sort(b);
+  b.erase(std::unique(b.begin(), b.end()), b.end());
+  for (int i = 0; i < n; ++i) {
+    int j = (int)b.size() - (std::upper_bound(b.begin(), b.end(), a[i]) - b.begin());
+    ans[j]++;
+  }
+
+  for (auto i : ans) std::cout << i << "\n";
+}
