@@ -1,0 +1,95 @@
+#include <bits/stdc++.h>
+using i64 = long long;
+using P = std::pair<int, int>;
+using T = std::tuple<int, int, int>;
+
+int main() {
+  std::cin.tie(nullptr)->sync_with_stdio(false);
+  int n;
+  std::cin >> n;
+  std::vector s(n, std::vector<char>(n)), t(n, std::vector<char>(n));
+  for (int i = 0; i < n; ++i) {
+    for (int j = 0; j < n; ++j) {
+      std::cin >> s[i][j];
+    }
+  }
+  for (int i = 0; i < n; ++i) {
+    for (int j = 0; j < n; ++j) {
+      std::cin >> t[i][j];
+    }
+  }
+
+  auto rotate = [&]() {
+    std::vector new_s(n, std::vector<char>(n));
+    for (int i = 0; i < n; ++i) {
+      for (int j = 0; j < n; ++j) {
+        new_s[j][n - 1 - i] = s[i][j];
+      }
+    }
+    s = new_s;
+  };
+
+  auto find_st = [&](std::vector<std::vector<char>>& a) {
+    for (int i = 0; i < n; ++i) {
+      for (int j = 0; j < n; ++j) {
+        if (a[i][j] == '#') return P(i, j);
+      }
+    }
+
+    return P(0, 0);
+  };
+
+  std::vector dy = {0, 1, 0, -1}, dx = {1, 0, -1, 0};
+  auto bfs = [&](std::vector<std::vector<char>>& a, int sy, int sx) {
+    std::set<P> ret;
+    std::queue<P> q;
+    std::vector vis(n, std::vector<int>(n, false));
+    ret.insert({0, 0});
+    q.push({sy, sx});
+    vis[sy][sx] = true;
+
+    while (!q.empty()) {
+      auto [y, x] = q.front();
+      q.pop();
+      for (int dir = 0; dir < 4; ++dir) {
+        int ny = y + dy[dir], nx = x + dx[dir];
+        if (ny < 0 || ny >= n || nx < 0 || nx >= n) continue;
+        if (vis[ny][nx] == true) continue;
+        q.push({ny, nx});
+        vis[ny][nx] = true;
+        if (a[ny][nx] == '#') ret.insert({ny - sy, nx - sx});
+      }
+    }
+
+    return ret;
+  };
+
+  auto print = [&](std::vector<std::vector<char>>& a) {
+    for (int i = 0; i < n; ++i) {
+      for (int j = 0; j < n; ++j) {
+        std::cout << a[i][j] << " \n"[j == n - 1];
+      }
+    }
+  };
+  auto [t_y, t_x] = find_st(t);
+  auto t_map = bfs(t, t_y, t_x);
+  bool ans = false;
+  for (int dir = 0; dir < 4; ++dir) {
+    std::map<int, std::map<int, int>> m1, m2;
+    auto [s_y, s_x] = find_st(s);
+    auto s_map = bfs(s, s_y, s_x);
+    if (s_map == t_map) ans = true;
+    /*
+    if (dir > 0) {
+      print(s);
+      print(t);
+      std::cout << " --------------------------- \n\n";
+    }
+    */
+
+    rotate();
+  }
+
+  if (ans == true) std::cout << "Yes\n";
+  else std::cout << "No\n";
+}
