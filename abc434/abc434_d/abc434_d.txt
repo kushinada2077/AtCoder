@@ -1,0 +1,60 @@
+#include <bits/stdc++.h>
+using i64 = long long;
+using P = std::pair<int, int>;
+using T = std::tuple<int, int, int>;
+using F = std::tuple<int, int, int, int>;
+
+int main() {
+  std::cin.tie(nullptr)->sync_with_stdio(false);
+  int n;
+  std::cin >> n;
+  std::vector board(2002, std::vector<int>(2002, 0));
+  std::vector<F> cloud(n);
+  for (int i = 0; i < n; ++i) {
+    int u, d, l, r;
+    std::cin >> u >> d >> l >> r;
+    cloud[i] = F(u, d, l, r);
+    board[u][l]++;
+    board[u][r + 1]--;
+    board[d + 1][l]--;
+    board[d + 1][r + 1]++;
+  }
+
+  for (int i = 1; i < 2001; ++i) {
+    for (int j = 1; j < 2001; ++j) {
+      board[i][j] += board[i][j - 1];
+    }
+  }
+
+  for (int i = 1; i < 2001; ++i) {
+    for (int j = 1; j < 2001; ++j) {
+      board[i][j] += board[i - 1][j];
+    }
+  }
+
+  int tot = 0;
+  std::vector<int> cnt(n + 1);
+  for (int i = 1; i < 2001; ++i) {
+    for (int j = 1; j < 2001; ++j) {
+      if (board[i][j] == 0) {
+        tot++;
+        board[i][j] = 0;
+      } else if (board[i][j] > 1) {
+        board[i][j] = 0;
+      }
+    }
+  }
+
+  std::vector pref(2002, std::vector<int>(2002, 0));
+  for (int i = 1; i < 2001; ++i) {
+    int pre_tot = 0;
+    for (int j = 1; j < 2001; ++j) {
+      pref[i][j] = pref[i - 1][j] + pref[i][j - 1] - pref[i - 1][j - 1] + board[i][j];
+    }
+  }
+
+  for (auto [u, d, l, r] : cloud) {
+    int cnt = pref[d][r] - pref[u - 1][r] - pref[d][l - 1] + pref[u - 1][l - 1];
+    std::cout << tot + cnt << "\n";
+  }
+}
