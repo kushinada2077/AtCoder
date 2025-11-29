@@ -1,0 +1,34 @@
+#include <bits/stdc++.h>
+using i64 = long long;
+using P = std::pair<int, int>;
+using T = std::tuple<int, int, int>;
+
+bool covered(i64 l1, i64 r1, i64 l2, i64 r2) { return !(r1 < l2 || r2 < l1); }
+void solve() {
+  int n, h;
+  std::cin >> n >> h;
+  i64 left = h, right = h, pre_t = 0;
+  bool res = true;
+
+  for (int i = 0; i < n; ++i) {
+    i64 t, l, u;
+    std::cin >> t >> l >> u;
+    i64 next_left = std::max(1LL, left - (t - pre_t)), next_right = std::min(1000000000LL, right + (t - pre_t));
+    if (!covered(next_left, next_right, l, u)) res = false;
+
+    left = std::max(next_left, l);
+    right = std::min(next_right, u);
+    pre_t = t;
+  }
+
+  if (res == false) std::cout << "No\n";
+  else std::cout << "Yes\n";
+}
+int main() {
+  std::cin.tie(nullptr)->sync_with_stdio(false);
+  int t;
+  std::cin >> t;
+  while (t--) {
+    solve();
+  }
+}
