@@ -1,0 +1,69 @@
+#include <bits/stdc++.h>
+#ifndef ONLINE_JUDGE
+#define kushinada freopen(getenv("MY_PATH"), "r", stdin);
+#else
+#define kushinada
+#endif
+
+using i64 = long long;
+using P = std::pair<int, int>;
+using T = std::tuple<int, int, int>;
+
+int main() {
+  std::cin.tie(nullptr)->sync_with_stdio(false);
+  kushinada;
+
+  int n;
+  std::cin >> n;
+
+  std::vector<int> p(n);
+  std::vector<int> pos(n + 1);
+  for (int i = 0; i < n; ++i) {
+    std::cin >> p[i];
+    pos[p[i]] = i;
+  }
+
+  std::vector<int> l(n, -1), r(n, -1);
+  std::vector<int> st;
+
+  for (int i = 0; i < n; ++i) {
+    while (!st.empty() && p[st.back()] < p[i]) {
+      st.pop_back();
+    }
+    if (!st.empty()) {
+      l[i] = st.back();
+    }
+    st.push_back(i);
+  }
+
+  st.clear();
+  for (int i = n - 1; i >= 0; --i) {
+    while (!st.empty() && p[st.back()] < p[i]) {
+      st.pop_back();
+    }
+    if (!st.empty()) {
+      r[i] = st.back();
+    }
+    st.push_back(i);
+  }
+
+  std::vector<i64> dp(n, 0);
+
+  for (int h = n; h >= 1; --h) {
+    int cur = pos[h];
+
+    if (l[cur] != -1) {
+      dp[cur] = std::max(dp[cur], dp[l[cur]] + std::abs(cur - l[cur]));
+    }
+    if (r[cur] != -1) {
+      dp[cur] = std::max(dp[cur], dp[r[cur]] + std::abs(cur - r[cur]));
+    }
+  }
+
+  i64 ans = 0;
+  for (int i = 0; i < n; ++i) {
+    ans = std::max(ans, dp[i]);
+  }
+
+  std::cout << ans << "\n";
+}
