@@ -1,0 +1,50 @@
+#include <bits/stdc++.h>
+#ifndef ONLINE_JUDGE
+#define kushinada freopen(getenv("MY_PATH"), "r", stdin);
+#else
+#define kushinada
+#endif
+
+using i64 = long long;
+using P = std::pair<int, int>;
+using T = std::tuple<int, int, int>;
+
+int main() {
+  std::cin.tie(nullptr)->sync_with_stdio(false);
+  kushinada;
+
+  i64 n;
+  int q;
+  std::cin >> n >> q;
+
+  std::map<i64, i64> seg;
+  i64 black = 0;
+
+  while (q--) {
+    i64 l, r;
+    std::cin >> l >> r;
+
+    auto it = seg.upper_bound(l);
+    if (it != seg.begin()) {
+      auto pit = std::prev(it);
+      if (pit->second >= l - 1) {
+        l = pit->first;
+        r = std::max(r, pit->second);
+        black -= (pit->second - pit->first + 1);
+        seg.erase(pit);
+      }
+    }
+
+    it = seg.lower_bound(l);
+    while (it != seg.end() && it->first <= r + 1) {
+      r = std::max(r, it->second);
+      black -= (it->second - it->first + 1);
+      it = seg.erase(it);
+    }
+
+    seg[l] = r;
+    black += (r - l + 1);
+
+    std::cout << (n - black) << "\n";
+  }
+}
