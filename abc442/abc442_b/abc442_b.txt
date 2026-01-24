@@ -1,0 +1,35 @@
+#include <bits/stdc++.h>
+#ifndef ONLINE_JUDGE
+#define kushinada freopen(getenv("MY_PATH"), "r", stdin);
+#else
+#define kushinada
+#endif
+
+using i64 = long long;
+using P = std::pair<int, int>;
+using T = std::tuple<int, int, int>;
+
+int main() {
+  std::cin.tie(nullptr)->sync_with_stdio(false);
+  kushinada;
+  int q, volume = 0;
+  bool playing = false;
+
+  std::cin >> q;
+  for (int i = 0; i < q; ++i) {
+    int a;
+    std::cin >> a;
+    if (a == 1) {
+      volume++;
+    }
+    if (a == 2) {
+      volume = std::max(0, volume - 1);
+    }
+    if (a == 3) {
+      playing = !playing;
+    }
+
+    if (volume >= 3 && playing) std::cout << "Yes\n";
+    else std::cout << "No\n";
+  }
+}
