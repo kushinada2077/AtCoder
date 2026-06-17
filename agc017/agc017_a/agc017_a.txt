@@ -1,0 +1,41 @@
+#include <bits/stdc++.h>
+
+#ifndef ONLINE_JUDGE
+#define kushinada freopen(getenv("MY_PATH"), "r", stdin);
+#else
+#define kushinada
+#endif
+
+using i64 = long long;
+using P = std::pair<int, int>;
+using TP = std::tuple<int, int, int>;
+
+int main() {
+  std::cin.tie(NULL)->sync_with_stdio(false);
+  kushinada;
+  int n, p;
+  std::cin >> n >> p;
+  std::vector<int> a(n);
+  i64 odd = 0, even = 0;
+  for (int i = 0; i < n; ++i) {
+    std::cin >> a[i];
+    if (a[i] % 2) {
+      odd++;
+    } else {
+      even++;
+    }
+  }
+
+  i64 x = (1LL << even);
+  i64 b = 1;
+  if (odd > 0) {
+    b = (1LL << (odd - 1));
+  }
+
+  i64 ans = b * x;
+  if (p == 1) {
+    ans = (1LL << n) - ans;
+  }
+
+  std::println("{}", ans);
+}
