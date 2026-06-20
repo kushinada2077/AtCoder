@@ -1,0 +1,51 @@
+#include <bits/stdc++.h>
+
+#ifndef ONLINE_JUDGE
+#define kushinada freopen(getenv("MY_PATH"), "r", stdin);
+#else
+#define kushinada
+#endif
+
+using i64 = long long;
+using P = std::pair<int, int>;
+using TP = std::tuple<int, int, int>;
+
+int main() {
+  std::cin.tie(NULL)->sync_with_stdio(false);
+  kushinada;
+  int n;
+  std::cin >> n;
+  std::vector<int> h(n), l(n);
+  for (int i = 0; i < n; ++i) {
+    std::cin >> h[i] >> l[i];
+  }
+  std::vector<int> pref(n + 1);
+  pref[n] = h.back();
+  for (int i = n - 1; i >= 0; --i) {
+    pref[i] = std::max(h[i], pref[i + 1]);
+  }
+
+  int q;
+  std::cin >> q;
+  std::vector<P> query;
+  for (int i = 0; i < q; ++i) {
+    int x;
+    std::cin >> x;
+    query.push_back({x, i});
+  }
+
+  std::ranges::sort(query);
+  std::vector<int> ans(q);
+  int idx = 0;
+  for (int i = 0; i < q; ++i) {
+    auto [x, ii] = query[i];
+    while (l[idx] <= x) {
+      idx++;
+    }
+    ans[ii] = pref[idx];
+  }
+
+  for (auto x : ans) {
+    std::println("{}", x);
+  }
+}
