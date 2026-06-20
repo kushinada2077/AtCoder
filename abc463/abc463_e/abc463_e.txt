@@ -1,0 +1,59 @@
+#include <bits/stdc++.h>
+
+#ifndef ONLINE_JUDGE
+#define kushinada freopen(getenv("MY_PATH"), "r", stdin);
+#else
+#define kushinada
+#endif
+
+using i64 = long long;
+using P = std::pair<i64, i64>;
+using TP = std::tuple<int, int, int>;
+
+int main() {
+  std::cin.tie(NULL)->sync_with_stdio(false);
+  kushinada;
+  int n, m;
+  i64 y;
+  std::cin >> n >> m >> y;
+  const int GATE = n;
+  std::vector adj(n + 1, std::vector<P>());
+  for (int i = 0; i < m; ++i) {
+    int u, v, t;
+    std::cin >> u >> v >> t;
+    adj[u - 1].push_back({v - 1, t});
+    adj[v - 1].push_back({u - 1, t});
+  }
+
+  for (int i = 0; i < n; ++i) {
+    int x;
+    std::cin >> x;
+    adj[i].push_back({GATE, x + y});
+    adj[GATE].push_back({i, x});
+  }
+
+  const int S = 0;
+  std::priority_queue<P, std::vector<P>, std::greater<P>> pq;
+  std::vector<i64> dis(n + 1, std::numeric_limits<i64>::max() / 3);
+
+  dis[S] = 0;
+  pq.push({0, S});
+  while (!pq.empty()) {
+    auto [d, u] = pq.top();
+    pq.pop();
+    if (dis[u] != d) {
+      continue;
+    }
+
+    for (auto [v, t] : adj[u]) {
+      if (dis[u] + t < dis[v]) {
+        dis[v] = dis[u] + t;
+        pq.push({dis[v], v});
+      }
+    }
+  }
+
+  for (int i = 0; i < n - 1; ++i) {
+    std::print("{} ", dis[i + 1]);
+  }
+}
