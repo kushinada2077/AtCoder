@@ -1,0 +1,62 @@
+#include <bits/stdc++.h>
+
+#ifndef ONLINE_JUDGE
+#define kushinada freopen(getenv("MY_PATH"), "r", stdin);
+#else
+#define kushinada
+#endif
+
+using i64 = long long;
+using P = std::pair<int, int>;
+using TP = std::tuple<int, int, int>;
+
+int main() {
+  std::cin.tie(NULL)->sync_with_stdio(false);
+  kushinada;
+  int n, k;
+  std::cin >> n >> k;
+  std::vector<P> lr(n);
+  for (int i = 0; i < n; ++i) {
+    std::cin >> lr[i].second >> lr[i].first;
+  }
+
+  std::ranges::sort(lr);
+
+  int st = 0, en = 0x3f3f3f3f;
+  auto ok = [&](int d) -> bool {
+    std::vector<int> rs(n);
+    for (int i = 0; i < n; ++i) {
+      rs[i] = lr[i].first;
+    }
+
+    std::vector<int> dp(n + 1);
+    for (int i = 1; i <= n; ++i) {
+      auto [r, l] = lr[i - 1];
+      int p;
+      if (d == 0) {
+        p = lower_bound(rs.begin(), rs.begin() + (i - 1), l) - rs.begin();
+      } else {
+        p = upper_bound(rs.begin(), rs.begin() + (i - 1), l - d) - rs.begin();
+      }
+      dp[i] = std::max(dp[i - 1], dp[p] + 1);
+    }
+
+    return dp[n] >= k;
+  };
+
+  if (!ok(0)) {
+    std::println("-1");
+    return 0;
+  }
+
+  while (st + 1 < en) {
+    int mid = (st + en) / 2;
+    if (ok(mid)) {
+      st = mid;
+    } else {
+      en = mid;
+    }
+  }
+
+  std::println("{}", st);
+}
