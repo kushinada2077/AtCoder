@@ -15,37 +15,22 @@ int main() {
   kushinada;
   int n;
   std::cin >> n;
-  std::vector<int> h(n), l(n);
+  std::vector<P> taka;
   for (int i = 0; i < n; ++i) {
-    std::cin >> h[i] >> l[i];
-  }
-  std::vector<int> pref(n + 1);
-  pref[n] = h.back();
-  for (int i = n - 1; i >= 0; --i) {
-    pref[i] = std::max(h[i], pref[i + 1]);
+    int h, l;
+    std::cin >> h >> l;
+    while (!taka.empty() && taka.back().second <= h) {
+      taka.pop_back();
+    }
+    taka.emplace_back(l, h);
   }
 
   int q;
   std::cin >> q;
-  std::vector<P> query;
   for (int i = 0; i < q; ++i) {
-    int x;
-    std::cin >> x;
-    query.push_back({x, i});
-  }
-
-  std::ranges::sort(query);
-  std::vector<int> ans(q);
-  int idx = 0;
-  for (int i = 0; i < q; ++i) {
-    auto [x, ii] = query[i];
-    while (l[idx] <= x) {
-      idx++;
-    }
-    ans[ii] = pref[idx];
-  }
-
-  for (auto x : ans) {
+    int t;
+    std::cin >> t;
+    auto x = std::ranges::upper_bound(taka, t, {}, &P::first)->second;
     std::println("{}", x);
   }
 }
