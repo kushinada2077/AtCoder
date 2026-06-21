@@ -15,48 +15,29 @@ int main() {
   kushinada;
   int n, k;
   std::cin >> n >> k;
-  std::vector<P> lr(n);
-  for (int i = 0; i < n; ++i) {
-    std::cin >> lr[i].second >> lr[i].first;
+  std::vector<P> cloth(n);
+  for (auto&& [l, r] : cloth) {
+    std::cin >> l >> r;
   }
 
-  std::ranges::sort(lr);
+  std::ranges::sort(cloth, {}, &P::second);
 
-  int st = 0, en = 0x3f3f3f3f;
-  auto ok = [&](int d) -> bool {
-    std::vector<int> rs(n);
-    for (int i = 0; i < n; ++i) {
-      rs[i] = lr[i].first;
-    }
-
-    std::vector<int> dp(n + 1);
-    for (int i = 1; i <= n; ++i) {
-      auto [r, l] = lr[i - 1];
-      int p;
-      if (d == 0) {
-        p = lower_bound(rs.begin(), rs.begin() + (i - 1), l) - rs.begin();
-      } else {
-        p = upper_bound(rs.begin(), rs.begin() + (i - 1), l - d) - rs.begin();
+  int ans{*std::ranges::partition_point(std::views::iota(0, 0x3f3f3f3f), [k, &cloth](const int x) {
+    int chosen{}, last{};
+    for (const auto& [l, r] : cloth) {
+      if (last <= l) {
+        chosen++;
+        last = r + x + 1;
       }
-      dp[i] = std::max(dp[i - 1], dp[p] + 1);
     }
+    return chosen >= k;
+  })};
 
-    return dp[n] >= k;
-  };
-
-  if (!ok(0)) {
+  if (ans) {
+    std::println("{}", ans);
+  } else {
     std::println("-1");
-    return 0;
   }
 
-  while (st + 1 < en) {
-    int mid = (st + en) / 2;
-    if (ok(mid)) {
-      st = mid;
-    } else {
-      en = mid;
-    }
-  }
-
-  std::println("{}", st);
+  return 0;
 }
