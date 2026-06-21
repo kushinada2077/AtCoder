@@ -23,11 +23,11 @@ int main() {
   std::ranges::sort(cloth, {}, &P::second);
 
   int ans{*std::ranges::partition_point(std::views::iota(0, 0x3f3f3f3f), [k, &cloth](const int x) {
-    int chosen{}, last{};
+    int chosen{}, last = -1;
     for (const auto& [l, r] : cloth) {
-      if (last <= l) {
+      if (last < l) {
         chosen++;
-        last = r + x + 1;
+        last = r + x;
       }
     }
     return chosen >= k;
