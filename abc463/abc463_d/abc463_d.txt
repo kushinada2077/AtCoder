@@ -15,21 +15,23 @@ int main() {
   kushinada;
   int n, k;
   std::cin >> n >> k;
-  std::vector<P> cloth(n);
-  for (auto&& [l, r] : cloth) {
+  std::vector<P> lr(n);
+  for (auto& [l, r] : lr) {
     std::cin >> l >> r;
   }
 
-  std::ranges::sort(cloth, {}, &P::second);
+  std::ranges::sort(lr, {}, &P::second);
 
-  int ans{*std::ranges::partition_point(std::views::iota(0, 0x3f3f3f3f), [k, &cloth](const int x) {
-    int chosen{}, last = -1;
-    for (const auto& [l, r] : cloth) {
-      if (last < l) {
+  int ans{*std::ranges::partition_point(std::views::iota(0, 0x3f3f3f3f), [k, lr](int x) -> bool {
+    int last{}, chosen{};
+
+    for (auto [l, r] : lr) {
+      if (last <= l) {
         chosen++;
-        last = r + x;
+        last = r + x + 1;
       }
     }
+
     return chosen >= k;
   })};
 
@@ -38,6 +40,4 @@ int main() {
   } else {
     std::println("-1");
   }
-
-  return 0;
 }
