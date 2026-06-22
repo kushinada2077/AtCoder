@@ -15,26 +15,22 @@ int main() {
   kushinada;
   int n, d;
   std::cin >> n >> d;
-  std::vector<int> cnt_l(1000001), cnt_r(1000001);
-  int min = 0x3f3f3f3f, max = 0;
+  std::vector<int> a(1000001);
+  int M{};
   for (int i = 0; i < n; ++i) {
-    int l, r;
-    std::cin >> l >> r;
-    if (r - l >= d) {
-      cnt_l[l + d]++;
-      cnt_r[r - d]++;
+    int s, t;
+    std::cin >> s >> t;
+    if (t - s >= d) {
+      a[s]++;
+      a[t - d + 1]--;
     }
-    min = std::min(min, l);
-    max = std::max(max, r);
+    M = std::max(M, t);
   }
 
-  i64 ans{}, chosen{};
-
-  for (int i = min + d; i <= max; ++i) {
-    chosen += cnt_l[i];
-    ans += chosen * (chosen - 1) / 2;
-    chosen -= cnt_r[i - d];
+  i64 ans{}, c{};
+  for (int i = 0; i < M; ++i) {
+    c += a[i];
+    ans += c * (c - 1) / 2;
   }
-
   std::println("{}", ans);
 }
