@@ -35,7 +35,7 @@ int main() {
   for (int i = 0; i < H; ++i) {
     for (int j = i; j < H; ++j) {
       pref.assign(W + 1, 0);
-      cnt.assign(300000, 0);
+      cnt.assign(H * W + 1, 0);
       cnt[0] = 1;
       for (int k = 0; k < W; ++k) {
         pref[k + 1] = pref[k] + (pref_c[j + 1][k] - pref_c[i][k]);
