@@ -1,0 +1,40 @@
+#include <bits/stdc++.h>
+
+#ifndef ONLINE_JUDGE
+#define kushinada freopen(getenv("MY_PATH"), "r", stdin);
+#else
+#define kushinada
+#endif
+
+using i64 = long long;
+using P = std::pair<int, int>;
+using TP = std::tuple<int, int, int>;
+
+int main() {
+  std::cin.tie(NULL)->sync_with_stdio(false);
+  kushinada;
+  int n, d;
+  std::cin >> n >> d;
+  std::vector<int> cnt_l(1000001), cnt_r(1000001);
+  int min = 0x3f3f3f3f, max = 0;
+  for (int i = 0; i < n; ++i) {
+    int l, r;
+    std::cin >> l >> r;
+    if (r - l >= d) {
+      cnt_l[l + d]++;
+      cnt_r[r - d]++;
+    }
+    min = std::min(min, l);
+    max = std::max(max, r);
+  }
+
+  i64 ans{}, chosen{};
+
+  for (int i = min + d; i <= max; ++i) {
+    chosen += cnt_l[i];
+    ans += chosen * (chosen - 1) / 2;
+    chosen -= cnt_r[i - d];
+  }
+
+  std::println("{}", ans);
+}
