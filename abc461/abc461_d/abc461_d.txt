@@ -1,0 +1,51 @@
+#include <bits/stdc++.h>
+
+#ifndef ONLINE_JUDGE
+#define kushinada freopen(getenv("MY_PATH"), "r", stdin);
+#else
+#define kushinada
+#endif
+
+using i64 = long long;
+using P = std::pair<int, int>;
+using TP = std::tuple<int, int, int>;
+
+int main() {
+  std::cin.tie(NULL)->sync_with_stdio(false);
+  kushinada;
+  int H, W, K;
+  std::cin >> H >> W >> K;
+  std::vector S(H, std::vector<char>(W));
+  std::vector pref_c(H + 1, std::vector<int>(W));
+  for (int i = 0; i < H; ++i) {
+    for (int j = 0; j < W; ++j) {
+      std::cin >> S[i][j];
+      S[i][j] -= '0';
+    }
+  }
+
+  for (int j = 0; j < W; ++j) {
+    for (int i = 0; i < H; ++i) {
+      pref_c[i + 1][j] = pref_c[i][j] + S[i][j];
+    }
+  }
+
+  i64 ans{};
+  std::vector<int> cnt, pref;
+  for (int i = 0; i < H; ++i) {
+    for (int j = i; j < H; ++j) {
+      pref.assign(W + 1, 0);
+      cnt.assign(300000, 0);
+      cnt[0] = 1;
+      for (int k = 0; k < W; ++k) {
+        pref[k + 1] = pref[k] + (pref_c[j + 1][k] - pref_c[i][k]);
+        if (pref[k + 1] - K >= 0) {
+          ans += cnt[pref[k + 1] - K];
+        }
+        cnt[pref[k + 1]]++;
+      }
+    }
+  }
+
+  std::println("{}", ans);
+}
