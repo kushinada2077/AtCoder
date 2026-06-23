@@ -13,40 +13,18 @@ using TP = std::tuple<int, int, int>;
 int main() {
   std::cin.tie(NULL)->sync_with_stdio(false);
   kushinada;
+  const int INF = 0x3f3f3f3f - 1;
   int H, W;
   std::cin >> H >> W;
   std::vector<std::string> S(H);
   std::queue<P> que;
-  std::vector dis(H, std::vector<int>(W, -1));
+  std::vector dis(H, std::vector<int>(W, INF));
   for (int i = 0; i < H; ++i) {
     std::cin >> S[i];
-    for (int j = 0; j < W; ++j) {
-      if (S[i][j] == '#') {
-        dis[i][j] = 0;
-        que.emplace(i, j);
-      }
-    }
   }
 
   std::vector dy = {-1, -1, 0, 1, 1, 1, 0, -1};
   std::vector dx = {0, 1, 1, 1, 0, -1, -1, -1};
-  while (!que.empty()) {
-    auto [y, x] = que.front();
-    que.pop();
-    for (int dir = 0; dir < 8; ++dir) {
-      int ny = y + dy[dir];
-      int nx = x + dx[dir];
-      if (ny < 0 || ny >= H || nx < 0 || nx >= W) {
-        continue;
-      }
-      if (S[ny][nx] == '#' || dis[ny][nx] != -1) {
-        continue;
-      }
-      dis[ny][nx] = dis[y][x] + 1;
-      que.emplace(ny, nx);
-    }
-  }
-
   auto chk = [&](int y, int x) -> bool {
     for (int dir = 0; dir < 8; ++dir) {
       int ny = y + dy[dir];
@@ -61,20 +39,18 @@ int main() {
     return false;
   };
 
-  std::vector dis2(H, std::vector<int>(W, -1));
   std::vector NS(H, std::vector<char>(W));
   for (int i = 0; i < H; ++i) {
     for (int j = 0; j < W; ++j) {
       if (S[i][j] == '#') {
         NS[i][j] = '.';
       } else {
-        if (chk(i, j)) {
-          NS[i][j] = '#';
-          dis2[i][j] = 1;
-          que.emplace(i, j);
-        } else {
-          NS[i][j] = '.';
-        }
+        NS[i][j] = chk(i, j) ? '#' : '.';
+      }
+
+      if (NS[i][j] == '#') {
+        dis[i][j] = 0;
+        que.emplace(i, j);
       }
     }
   }
@@ -88,31 +64,22 @@ int main() {
       if (ny < 0 || ny >= H || nx < 0 || nx >= W) {
         continue;
       }
-      if (NS[ny][nx] == '#' || dis2[ny][nx] != -1) {
+      if (NS[ny][nx] == '#' || dis[ny][nx] != INF) {
         continue;
       }
-      dis2[ny][nx] = dis2[y][x] + 1;
+      dis[ny][nx] = dis[y][x] + 1;
       que.emplace(ny, nx);
     }
   }
 
   for (int i = 0; i < H; ++i) {
     for (int j = 0; j < W; ++j) {
-      if (S[i][j] == '#') {
-        if (dis2[i][j] % 2 == 0) {
-          std::print("#");
-        } else {
-          std::print(".");
-        }
+      if (dis[i][j] % 2) {
+        std::print("#");
       } else {
-        if (dis[i][j] % 2 == 0) {
-          std::print("#");
-        } else {
-          std::print(".");
-        }
+        std::print(".");
       }
     }
-
     std::println();
   }
 }
