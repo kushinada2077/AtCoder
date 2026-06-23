@@ -15,20 +15,27 @@ int main() {
   kushinada;
   int X, Q;
   std::cin >> X >> Q;
-  std::multiset<int> S;
-  S.insert(X);
-  auto it = S.begin();
+  std::priority_queue<int> l;
+  std::priority_queue<int, std::vector<int>, std::greater<int>> r;
+  l.push(X);
   for (int i = 0; i < Q; ++i) {
     int A, B;
     std::cin >> A >> B;
-    S.insert(A);
-    S.insert(B);
-    if (std::min(A, B) > *it) {
-      it = std::next(it);
-    } else if (std::max(A, B) < *it) {
-      it = std::prev(it);
+    if (A > B) std::swap(A, B);
+    if (B < l.top()) {
+      l.push(A);
+      l.push(B);
+      r.push(l.top());
+      l.pop();
+    } else if (A > l.top()) {
+      r.push(A);
+      r.push(B);
+      l.push(r.top());
+      r.pop();
+    } else {
+      l.push(A);
+      r.push(B);
     }
-
-    std::println("{}", *it);
+    std::println("{}", l.top());
   }
 }
