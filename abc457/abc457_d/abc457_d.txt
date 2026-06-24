@@ -21,7 +21,7 @@ int main() {
     std::cin >> a[i];
   }
 
-  i64 ans{*std::ranges::partition_point(std::views::iota(0LL, a[0] + k + 5), [&](i64 x) -> bool {
+  i64 ans{*std::ranges::partition_point(std::views::iota(0LL, a[0] + k), [&](i64 x) -> bool {
     i64 tot = 0;
     i64 xx = x + 1;
     for (int i = 0; i < n; ++i) {
