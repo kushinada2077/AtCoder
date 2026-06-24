@@ -1,0 +1,38 @@
+#include <bits/stdc++.h>
+
+#ifndef ONLINE_JUDGE
+#define kushinada freopen(getenv("MY_PATH"), "r", stdin);
+#else
+#define kushinada
+#endif
+
+using i64 = long long;
+using P = std::pair<int, int>;
+using TP = std::tuple<int, int, int>;
+
+int main() {
+  std::cin.tie(NULL)->sync_with_stdio(false);
+  kushinada;
+  int n;
+  i64 k;
+  std::cin >> n >> k;
+  std::vector<i64> a(n);
+  for (int i = 0; i < n; ++i) {
+    std::cin >> a[i];
+  }
+
+  i64 ans{*std::ranges::partition_point(std::views::iota(0LL, a[0] + k + 5), [&](i64 x) -> bool {
+    i64 tot = 0;
+    i64 xx = x + 1;
+    for (int i = 0; i < n; ++i) {
+      if (xx > a[i]) {
+        tot += (xx - a[i] + i) / (i + 1);
+      }
+      if (tot > k) return false;
+    }
+
+    return true;
+  })};
+
+  std::println("{}", ans);
+}
