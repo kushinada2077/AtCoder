@@ -1,0 +1,26 @@
+#include <bits/stdc++.h>
+#include <atcoder/modint>
+
+#ifndef ONLINE_JUDGE
+#define kushinada freopen(getenv("MY_PATH"), "r", stdin);
+#else
+#define kushinada
+#endif
+
+using i64 = long long;
+using P = std::pair<int, int>;
+using TP = std::tuple<int, int, int>;
+using mint = atcoder::modint998244353;
+
+int main() {
+  std::cin.tie(NULL)->sync_with_stdio(false);
+  kushinada;
+  std::string s;
+  std::cin >> s;
+  std::vector<mint> dp(3);
+  for (auto c : s) {
+    dp[c - 'a'] = dp[0] + dp[1] + dp[2] + 1;
+  }
+
+  std::println("{}", (dp[0] + dp[1] + dp[2]).val());
+}
