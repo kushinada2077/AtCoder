@@ -1,0 +1,48 @@
+#include <bits/stdc++.h>
+#include <atcoder/modint>
+
+#ifndef ONLINE_JUDGE
+#define kushinada freopen(getenv("MY_PATH"), "r", stdin);
+#else
+#define kushinada
+#endif
+
+using i64 = long long;
+using P = std::pair<int, int>;
+using TP = std::tuple<int, int, int>;
+using mint = atcoder::modint998244353;
+
+int main() {
+  std::cin.tie(NULL)->sync_with_stdio(false);
+  kushinada;
+  int n, q;
+  std::cin >> n >> q;
+  std::vector<int> next(n, -1), prev(n, -1), floor(n);
+  std::ranges::iota(floor, 0);
+  for (int i = 0; i < q; ++i) {
+    int c, p;
+    std::cin >> c >> p;
+    c--;
+    p--;
+    if (prev[c] != -1) {
+      next[prev[c]] = -1;
+    } else {
+      floor[c] = -1;
+    }
+    prev[c] = p;
+    next[p] = c;
+  }
+
+  auto cnt = [&](int x) -> int {
+    int ret = 0, cur = x;
+    while (cur != -1) {
+      ret++;
+      cur = next[cur];
+    }
+    return ret;
+  };
+  for (int i = 0; i < n; ++i) {
+    if (floor[i] == -1) std::print("0 ");
+    else std::print("{} ", cnt(floor[i]));
+  }
+}
